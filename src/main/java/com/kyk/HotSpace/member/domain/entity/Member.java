@@ -28,4 +28,19 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;
 
+    public Member(String name, String loginId, String password, Role role) {
+        this.name = name;
+        this.loginId = loginId;
+        this.password = password;
+        this.role = role;
+    }
+
+
+    // 비즈니스 로직
+    // 변경 감지로 프로필 업데이트
+    public void changeProfile(String name, String loginId, String password){
+        this.name = name;
+        this.loginId = loginId;
+        this.password = password;
+    }
 }
