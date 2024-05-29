@@ -3,13 +3,14 @@ package com.kyk.HotSpace.member.domain.dto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 
 /**
  * 로그인시 사용될 DTO
  */
-@Getter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LoginForm {
     @NotBlank(message = "아이디를 입력해주세요")

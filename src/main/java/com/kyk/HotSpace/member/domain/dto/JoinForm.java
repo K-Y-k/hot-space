@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 /**
  * 회원 가입시 사용될 DTO
  */
-@Getter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class JoinForm {
     @NotBlank(message = "닉네임을 입력해주세요")
