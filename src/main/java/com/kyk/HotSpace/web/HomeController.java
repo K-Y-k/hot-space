@@ -19,9 +19,9 @@ public class HomeController {
     @GetMapping("/")
     public String home(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDto loginMember,
                        Model model) {
-        if (loginMember == null) {
-            return "redirect:/members/login";
-        }
+//        if (loginMember == null) {
+//            return "redirect:/members/login";
+//        }
 
         return "main";
     }
