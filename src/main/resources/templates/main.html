@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 
     <!--네이버 지도-->
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=z544ho7mtf"></script>
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=z544ho7mtf&submodules=geocoder"></script>
 
     <!--css 적용-->
     <link rel="stylesheet" type="text/css" href="../css/main_style.css" th:href="@{/css/main_style.css}">
@@ -27,21 +27,10 @@
 <br>
 <button class="btn btn-primary flex-grow-1 mx-1" id="moveToCurrentLocation">내 위치</button>
 
-<!--<script>-->
-<!--    // 지도를 띄우는 코드-->
-<!--    var map = new naver.maps.Map('map', {-->
-<!--        center: new naver.maps.LatLng(37.5112, 127.0981),-->
-<!--        zoom: 15-->
-<!--    });-->
 
-<!--    // 마커(marker)를 찍는 코드-->
-<!--    var marker = new naver.maps.Marker({-->
-<!--        position: new naver.maps.LatLng(37.5112, 127.0981),-->
-<!--        map: map-->
-<!--    });-->
-<!--</script>-->
-
-<script src="/js/initMap.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/infoWindow.js"></script>
+<script src="/js/address.js"></script>
 
 </body>
 </html>
