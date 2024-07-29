@@ -14,11 +14,11 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeEntity {
-    @CreatedDate
+    @CreatedDate        // 엔티티가 생성되어 저장될 때 시간이 자동 저장된다.
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdDate;
 
-    @LastModifiedDate
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @LastModifiedDate  // 조회한 엔티티의 값을 변경할 때 시간이 자동 저장된다.
+    @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
     private LocalDateTime lastModifiedDate;
 }

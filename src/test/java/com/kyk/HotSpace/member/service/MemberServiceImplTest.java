@@ -36,10 +36,10 @@ public class MemberServiceImplTest {
 
         // when
         Member savedMember = memberRepository.saveMember(member);
-        MemberDto fineMember = memberService.findMemberDtoById(member.getId());
+        MemberDto findMember = memberService.findMemberDtoById(member.getId());
 
         // then
-        assertThat(fineMember.getId()).isEqualTo(savedMember.getId());
+        assertThat(findMember.getId()).isEqualTo(savedMember.getId());
     }
 
     @Test
