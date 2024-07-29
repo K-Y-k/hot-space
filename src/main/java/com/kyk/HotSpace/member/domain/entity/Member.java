@@ -1,9 +1,12 @@
 package com.kyk.HotSpace.member.domain.entity;
 
+import com.kyk.HotSpace.store.domain.entity.Store;
 import com.kyk.HotSpace.web.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Entity
@@ -28,6 +31,9 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;
 
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Store> stores = new ArrayList<>();
+
     public Member(String name, String loginId, String password, Role role) {
         this.name = name;
         this.loginId = loginId;
@@ -42,5 +48,10 @@ public class Member extends BaseTimeEntity {
         this.name = name;
         this.loginId = loginId;
         this.password = password;
+    }
+
+
+    public void changeRole(Role role) {
+        this.role = role;
     }
 }

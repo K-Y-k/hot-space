@@ -88,4 +88,22 @@ public class MemberController {
         log.info("sessionId={}", session.getId());
         return "redirect:/";
     }
+
+    /**
+     * 로그아웃 기능
+     */
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) { // SessionManager에서 request로 사용
+        // request.getSession( ) 안에 false는 현재 세션이 있으면 기존 세션 반환, 세션이 없으면 null을 반환
+        //                            true는 현재 세션이 있으면 기존 세션 반환, 세션이 없으면 새로운 세션 생성
+        HttpSession session = request.getSession(false); // 로그아웃은 없으면 새로운 세션을 생성할 필요 없기에 false를 넣음
+
+        if (session != null) { // 세션이 있으면
+            session.invalidate(); // 해당 세션이랑 그 안의 데이터를 모두 지운다.
+            log.info("로그아웃 완료");
+        }
+
+        return "redirect:/";
+    }
+
 }

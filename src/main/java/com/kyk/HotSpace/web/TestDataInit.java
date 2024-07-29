@@ -22,9 +22,9 @@ public class TestDataInit {
     @PostConstruct
     public void init() {
         // 회원 데이터 추가 총 3개
-        memberRepository.saveMember(new Member(1L, "admin", "qq", "qq", Role.ADMIN));
-        memberRepository.saveMember(new Member(2L, "ddd", "dd", "dd", Role.CUSTOMER));
-        memberRepository.saveMember(new Member(3L, "aaa", "aa", "aa", Role.CEO));
+        memberRepository.saveMember(new Member("admin", "qq", "qq", Role.ADMIN));
+        memberRepository.saveMember(new Member("ddd", "dd", "dd", Role.CUSTOMER));
+        memberRepository.saveMember(new Member("aaa", "aa", "aa", Role.CEO));
     }
 
 }
