@@ -31,6 +31,13 @@
             class="btn btn-primary flex-grow-1 mx-1" id="loginButton"
             th:onclick="|location.href='@{/members/login}'|">로그인</button>
 
+    <form th:action="@{/members/logout}" method="post">
+        <button th:if="${session.loginMember != null}"
+                type="submit" class="btn btn-primary flex-grow-1 mx-1" id="logoutButton"
+                th:onclick="@{/members/logout}">로그아웃
+        </button>
+    </form>
+
     <button th:if="${session.loginMember != null}"
             class="btn btn-primary flex-grow-1 mx-1" id="storeButton"
             th:onclick="|location.href='@{/stores/upload}'|">가게 등록</button>

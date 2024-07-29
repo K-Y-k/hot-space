@@ -1,15 +1,21 @@
 package com.kyk.HotSpace.store.service;
 
 import com.kyk.HotSpace.member.domain.entity.Member;
+import com.kyk.HotSpace.member.domain.entity.Role;
 import com.kyk.HotSpace.member.repository.MemberRepository;
 import com.kyk.HotSpace.store.domain.dto.StoreUploadForm;
 import com.kyk.HotSpace.store.domain.entity.Store;
 import com.kyk.HotSpace.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class StoreServiceImpl implements StoreService {
     private final MemberRepository memberRepository;
 
@@ -23,7 +29,9 @@ public class StoreServiceImpl implements StoreService {
 
         Store storeEntity = form.toEntity(findMember);
         storeRepository.save(storeEntity);
-
+        
+        findMember.changeRole(Role.CEO);
+        
         return storeEntity.getId();
     }
 
