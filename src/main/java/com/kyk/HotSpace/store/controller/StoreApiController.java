@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -26,14 +25,17 @@ public class StoreApiController {
      * 현재 중심 반경 500m 가게 찾기
      */
     @GetMapping("/api/checkStore")
-    public ResponseEntity<?> checkStore(double lat, double lng, double radius) {
+    public ResponseEntity<?> checkStore(double center_lat, double center_lng, double radius) {
 
-        log.info("현재 중심 위도 = {}, 경도 = {}", lat, lng);
+        log.info("현재 중심 위도 = {}, 경도 = {}", center_lat, center_lng);
         log.info("반경 = {}", radius);
 
         double radiusIn = radius / 1000;
-        List<Store> findStores = storeService.findMarkersWithinRadius(lat, lng, radiusIn);
 
+        // 현재 중심 좌표 반경 500m에 등록된 가게 찾기
+        List<Store> findStores = storeService.findMarkersWithinRadius(center_lat, center_lng, radiusIn);
+
+        // 필요한 API 스펙에 맞춘 DTO 리스트로 변환
         List<StoreDTO> findStoresDTOList = findStores.stream()
                 .map(m -> new StoreDTO(m.getId(), m.getName(), m.getAddress(), m.getNumber(), m.getNumber(), m.getLatitude(), m.getLongitude()))
                 .collect(Collectors.toList());

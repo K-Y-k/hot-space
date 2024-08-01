@@ -3,19 +3,19 @@ var marker;
 var position;
 var infoWindow;
 var debounceTimer;
-var radius = 500;
 
-var click_lat;
-var click_lng;
+var radius = 500;
+var markersArray = [];
+
 
 // 지도 생성
 function initMap() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             // 현재 위치의 위도, 경도
-            var lat = position.coords.latitude;
-            var lon = position.coords.longitude;
-            position = new naver.maps.LatLng(lat, lon);
+            var current_lat = position.coords.latitude;
+            var current_lng = position.coords.longitude;
+            position = new naver.maps.LatLng(current_lat, current_lng);
 
             // 현재 위치의 지도 생성
             map = new naver.maps.Map('map', {
@@ -36,6 +36,8 @@ function initMap() {
                     anchor: new naver.maps.Point(35, 85)
                 }
             });
+
+            fetchMarkers(current_lat, current_lng)
 
 
             // 전역 infowindow 객체 초기화
@@ -83,12 +85,11 @@ function initMap() {
 
                 debounceTimer = setTimeout(function() {
                     var center = map.getCenter();
-                    var lat = center.lat();
-                    var lng = center.lng();
-                    console.log('Current center:', lat, lng);
+                    var center_lat = center.lat();
+                    var center_lng = center.lng();
 
                     // 서버에 현재 중심 좌표를 전송하고 반경 500m 내의 데이터를 받아와서 마커로 표시하는 함수를 호출
-                    fetchMarkers(lat, lng);
+                    fetchMarkers(center_lat, center_lng);
                 }, 300); // 300ms 디바운스 시간 설정
             });
         }, function(error) {
@@ -110,45 +111,3 @@ $(document).ready(function() {
         map.fitBounds(position);
     });
 });
-
-// 서버에서 반경 500m 내의 데이터를 받아와서 마커로 표시하는 함수
-function fetchMarkers(lat, lng) {
-    console.log('받아와짐 : ' + lat + lng)
-
-    $.ajax({
-//        url: '/stores/api/checkStore?lat=${lat}&lng=${lng}&radius=500',
-        url: '/stores/api/checkStore',
-        type: 'GET',
-        dataType: "json",
-        data: {lat, lng, radius},
-        success: function(result) {
-            // 기존 마커를 모두 제거
-            clearMarkers();
-
-            console.log(JSON.stringify(result))
-
-            // 새로운 마커를 추가
-            result.forEach(function(markerData) {
-                var newMarker = new naver.maps.Marker({
-                    position: new naver.maps.LatLng(markerData.lat, markerData.lng),
-                    map: map
-                });
-
-                markersArray.push(newMarker);
-            });
-        },
-        error: function (status, error) {
-            console.log("오류", status, error);
-        }
-    });
-}
-
-// 기존 마커를 모두 제거하는 함수
-function clearMarkers() {
-    markersArray.forEach(function(marker) {
-        marker.setMap(null);
-    });
-
-    markersArray = [];
-}
-

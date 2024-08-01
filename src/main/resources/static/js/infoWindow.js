@@ -1,8 +1,8 @@
 // 클릭한 위치의 주소 등의 정보를 정보창에 출력
 function searchCoordinateToAddress(latlng) {
     console.log("latlng=", latlng);
-    click_lat = latlng.lat();
-    click_lng = latlng.lng();
+    var click_lat = latlng.lat();
+    var click_lng = latlng.lng();
 
     // naver.maps.Service.reverseGeocode 메서드를 호출하여 좌표를 주소로 변환
     naver.maps.Service.reverseGeocode({
