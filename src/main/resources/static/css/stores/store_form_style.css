@@ -5,3 +5,7 @@ html, body {
     justify-content: center;
     align-items: center;
 }
+
+.field-error {
+    border: 1px solid red;
+}

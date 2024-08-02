@@ -23,9 +23,15 @@
 </head>
 
 <body>
+
     <div id="map" style="width:50%; height:50%;"></div>
 
     <br>
+
+    <div class="address_search">
+        <input type="text" id="address" class="form-control" placeholder="이동할 주소 입력하세요"
+               onkeydown="handleEnter(event)">
+    </div>
 
     <button th:if="${session.loginMember == null}"
             class="btn btn-primary flex-grow-1 mx-1" id="loginButton"
