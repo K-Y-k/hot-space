@@ -5,7 +5,6 @@ import com.kyk.HotSpace.store.domain.entity.Store;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Getter @Setter
@@ -23,7 +22,7 @@ public class StoreUploadForm {
 
     private String siteUrl;
 
-    @NotNull(message = "지도에 가게가 위치하는 곳을 찍어주세요")
+    @NotZero(message = "지도에 가게가 위치하는 곳을 찍어주세요")
     private double latitude;
 
     private double longitude;

@@ -15,7 +15,6 @@
 
 <body>
 <div id="map" style="width:50%; height:50%;"></div>
-
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-6">
@@ -27,22 +26,27 @@
           <div class="card-body">
             <form action="" th:action th:object="${uploadForm}" method="post">
               <div class="mb-3">
-                <input type="text" id="store-name" th:field="*{name}" class="form-control" placeholder="가게명">
-                <div class="field-error" style="color: red;" th:errors="*{name}"></div>
+                <input type="text" id="store-name" th:field="*{name}" class="form-control" placeholder="가게명"
+                       th:errorclass="field-error">
+                <div style="color: red;" th:errors="*{name}"></div>
               </div>
 
               <div class="mb-3">
-                <input type="text" id="store-number" th:field="*{number}" class="form-control" placeholder="연락처 ex) 9999-9999-9999">
-                <div class="field-error" style="color: red;" th:errors="*{number}"></div>
+                <input type="text" id="store-number" th:field="*{number}" class="form-control" placeholder="연락처 ex) 9999-9999-9999"
+                       th:errorclass="field-error">
+                <div style="color: red;" th:errors="*{number}"></div>
               </div>
 
               <div class="mb-3">
-                <input type="text" th:field="*{siteUrl}" class="form-control" placeholder="홍보 사이트 url"
-                       th:errorclass="field-error" style="width: 350px;">
-                <div class="field-error" style="color: red;" th:errors="*{siteUrl}"></div>
+                <input type="text" id="store-url" th:field="*{siteUrl}" class="form-control" placeholder="홍보 사이트 url (없으면 공백)">
               </div>
 
               <br>
+
+              <input type="hidden" id="store-address" th:field="*{address}">
+              <input type="hidden" id="latitude" th:field="*{latitude}">
+              <input type="hidden" id="longitude" th:field="*{longitude}">
+              <div style="color: red;" th:errors="*{latitude}"></div>
 
               <div class="col">
                 <button class="w-100 btn btn-primary" id="register-btn" type="submit">등록</button>
@@ -51,11 +55,6 @@
                         type="button">취소
                 </button>
               </div>
-
-              <input type="hidden" id="store-address" th:field="*{address}">
-              <input type="hidden" id="latitude" th:field="*{latitude}">
-              <input type="hidden" id="longitude" th:field="*{longitude}">
-              <div class="field-error" style="color: red;" th:errors="*{latitude}"></div>
             </form>
           </div>
         </div>

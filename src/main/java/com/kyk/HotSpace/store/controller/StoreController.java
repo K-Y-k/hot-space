@@ -40,6 +40,12 @@ public class StoreController {
     @PostMapping("/upload")
     public String storeUpload(@SessionAttribute(LoginSessionConst.LOGIN_MEMBER) MemberDto loginMember,
                               @Valid @ModelAttribute("uploadForm") StoreUploadForm form, BindingResult bindingResult) throws IOException {
+        log.info("가게 이름 = {}", form.getName());
+        log.info("가게 연락처 = {}", form.getNumber());
+        log.info("가게 url = {}", form.getSiteUrl());
+        log.info("가게 좌표 = {}, {}", form.getLatitude(), form.getLongitude());
+        log.info("가게 주소 = {}", form.getAddress());
+
         if (bindingResult.hasErrors()) {
             return "stores/store_upload";
         }
