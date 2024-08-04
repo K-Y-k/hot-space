@@ -9,3 +9,18 @@ html, body {
 .field-error {
     border: 1px solid red;
 }
+
+.location_find {
+    display: flex;
+    align-items: center;
+
+    position: absolute;
+    top: 13%;
+    left: 3%;
+    padding: 10px;
+}
+
+#moveToCurrentLocation {
+    width: 100px;
+    padding: 10px;
+}

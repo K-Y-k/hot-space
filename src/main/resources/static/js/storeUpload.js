@@ -90,3 +90,11 @@ function searchCoordinateToAddress(latlng) {
         }
     });
 }
+
+// 내 위치로 이동 클릭 이벤트
+$(document).ready(function() {
+    $('#moveToCurrentLocation').on('click', function() {
+        initMap();
+        map.fitBounds(position);
+    });
+});

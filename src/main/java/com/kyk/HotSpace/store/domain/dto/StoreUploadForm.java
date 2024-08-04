@@ -5,11 +5,16 @@ import com.kyk.HotSpace.store.domain.entity.Store;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StoreUploadForm {
+
+    @NotEmpty(message = "시설 종류를 선택해주세요")
+    private String category;
+    
     @NotBlank(message = "가게 이름을 입력해주세요")
     private String name;
 
@@ -31,6 +36,7 @@ public class StoreUploadForm {
     // 엔티티에 @setter를 사용하지 않기 위해 dto에서 엔티티로 변환해주는 메서드 적용
     public Store toEntity(Member member) {
         return Store.builder()
+                .category(category)
                 .name(name)
                 .address(address)
                 .number(number)

@@ -14,7 +14,15 @@
 </head>
 
 <body>
-<div id="map" style="width:50%; height:50%;"></div>
+  <div id="map" style="width:50%; height:50%;"></div>
+
+  <div class="location_find">
+    <input type="text" id="address" class="form-control" placeholder="이동할 주소 입력하세요"
+             onkeydown="handleEnter(event)">
+
+    <button class="btn btn-primary" id="moveToCurrentLocation">내 위치</button>
+  </div>
+
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-6">
@@ -25,6 +33,21 @@
 
           <div class="card-body">
             <form action="" th:action th:object="${uploadForm}" method="post">
+              <div class="mb-3">
+                <select th:field="*{category}" class="form-select" th:errorclass="field-error">
+                  <option value="">시설 종류 선택</option>
+                  <option th:value="식당">식당</option>
+                  <option th:value="편의점">편의점</option>
+                  <option th:value="카페">카페</option>
+                  <option th:value="PC방">PC방</option>
+                  <option th:value="오락시설">오락시설</option>
+                  <option th:value="운동시설">운동시설</option>
+                  <option th:value="술집">술집</option>
+                  <option th:value="기타">기타</option>
+                </select>
+              </div>
+              <div style="color: red;" th:errors="*{category}"></div>
+
               <div class="mb-3">
                 <input type="text" id="store-name" th:field="*{name}" class="form-control" placeholder="가게명"
                        th:errorclass="field-error">

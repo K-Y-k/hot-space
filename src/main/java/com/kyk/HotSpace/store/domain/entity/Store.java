@@ -17,6 +17,8 @@ public class Store extends BaseTimeEntity {
     @Column(name = "store_id", nullable = false)
     private Long id;
 
+    private String category;
+
     @Column(nullable = false)
     private String name;
 
