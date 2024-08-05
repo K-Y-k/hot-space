@@ -4,6 +4,9 @@ var position;
 var infoWindow;
 var debounceTimer;
 
+var center_lat;
+var center_lng;
+
 var radius = 500;
 var markersArray = [];
 
@@ -22,6 +25,11 @@ function initMap() {
                 center: position,
                 zoom: 17
             });
+
+            // 현재 중심 좌표
+            var center = map.getCenter();
+            center_lat = center.lat();
+            center_lng = center.lng();
 
             map.setCursor('pointer') // 커서 손가락 모양으로 적용
 
@@ -85,8 +93,8 @@ function initMap() {
 
                 debounceTimer = setTimeout(function() {
                     var center = map.getCenter();
-                    var center_lat = center.lat();
-                    var center_lng = center.lng();
+                    center_lat = center.lat();
+                    center_lng = center.lng();
 
                     // 서버에 현재 중심 좌표를 전송하고 반경 500m 내의 데이터를 받아와서 마커로 표시하는 함수를 호출
                     fetchMarkers(center_lat, center_lng);
@@ -110,4 +118,10 @@ $(document).ready(function() {
         initMap();
         map.fitBounds(position);
     });
+});
+
+
+// 시설 종류가 선택되었을 때의 이벤트
+document.getElementById('category').addEventListener('change', function(event) {
+    fetchMarkers(center_lat, center_lng)
 });

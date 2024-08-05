@@ -2,11 +2,14 @@
 function fetchMarkers(center_lat, center_lng) {
     console.log('Current center:', center_lat, center_lng);
 
+    // 카테고리 가져오기
+    var category = document.getElementById('category').value;
+
     $.ajax({
         url: '/stores/api/checkStore',
         type: 'GET',
         dataType: "json",
-        data: {center_lat, center_lng, radius},
+        data: {center_lat, center_lng, radius, category},
         success: function(result) {
             // 기존 마커를 모두 제거
             clearMarkers();

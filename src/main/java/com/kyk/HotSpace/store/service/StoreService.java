@@ -15,4 +15,6 @@ public interface StoreService {
     void deleteStore(Long memberId);
 
     List<Store> findMarkersWithinRadius(double lat, double lng, double radius);
+
+    List<Store> findMarkersWithinRadiusByCategory(double center_lat, double center_lng, double radiusIn, String category);
 }

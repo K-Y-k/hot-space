@@ -38,4 +38,9 @@ public class SpringDataJpaStoreRepository implements StoreRepository{
     public List<Store> findStoreWithinRadius(double lat, double lng, double radius) {
         return JPAStoreRepository.findStoreWithinRadius(lat, lng, radius);
     }
+
+    @Override
+    public List<Store> findStoreWithinRadiusByCategory(double lat, double lng, double radius, String category) {
+        return JPAStoreRepository.findStoreWithinRadiusByCategory(lat, lng, radius, category);
+    }
 }

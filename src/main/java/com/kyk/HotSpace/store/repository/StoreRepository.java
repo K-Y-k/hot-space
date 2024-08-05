@@ -16,4 +16,5 @@ public interface StoreRepository {
     void clear();
 
     List<Store> findStoreWithinRadius(double lat, double lng, double radius);
+    List<Store> findStoreWithinRadiusByCategory(double lat, double lng, double radius, String category);
 }

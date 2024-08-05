@@ -54,4 +54,9 @@ public class StoreServiceImpl implements StoreService {
         return storeRepository.findStoreWithinRadius(lat, lng, radius);
     }
 
+    @Override
+    public List<Store> findMarkersWithinRadiusByCategory(double center_lat, double center_lng, double radiusIn, String category) {
+        return storeRepository.findStoreWithinRadiusByCategory(center_lat, center_lng, radiusIn, category);
+    }
+
 }
