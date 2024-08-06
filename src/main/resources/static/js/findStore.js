@@ -24,6 +24,45 @@ function fetchMarkers(center_lat, center_lng) {
                 });
 
                 markersArray.push(findStoreMarker);
+
+                // 생성한 마커 클릭 이벤트 핸들러: 클릭한 가게의 정보 출력
+                naver.maps.Event.addListener(findStoreMarker, 'click', function() {
+                    $.ajax({
+                        url: '/stores/api/storeDetails',
+                        type: 'GET',
+                        dataType: "json",
+                        data: { storeId: markerData.id },
+                        success: function(storeDetailResult) {
+                            console.log(JSON.stringify(storeDetailResult))
+
+                            var contentString = `
+                                <div class="info_inner">
+                                    <h3>${storeDetailResult.name}</h3>
+                                    <img src="./img/marker.png" width="55" height="55" class="thumb"/> <br>
+                                    <p>
+                                        <h6>주소: ${storeDetailResult.address}</h6>
+                                        <h6>연락처: ${storeDetailResult.number}</h6>
+                                        <div class="button-container">
+                                            <button class="btn btn-secondary">테이블 확인</button>
+                                            <button class="btn btn-secondary">예약하기</button>
+                                        </div>
+                                        <a href="${storeDetailResult.siteUrl}" target="_blank">${storeDetailResult.siteUrl}</a>
+                                    </p>
+                                </div>
+                            `;
+
+                            if (infoWindow.getMap()) {
+                                infoWindow.close();
+                            } else {
+                                infoWindow.setContent(contentString);
+                                infoWindow.open(map, findStoreMarker);
+                            }
+                        },
+                        error: function (status, error) {
+                            console.log("오류", status, error);
+                        }
+                    });
+                });
             });
         },
         error: function (status, error) {

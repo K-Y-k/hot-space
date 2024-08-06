@@ -6,8 +6,10 @@ import com.kyk.HotSpace.store.domain.dto.StoreUpdateForm;
 import com.kyk.HotSpace.store.domain.entity.Store;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StoreService {
+    Optional<Store> findById(Long id);
     Long saveStore(Long memberId, StoreUploadForm form);
 
     void changeStore(Long memberId, StoreUpdateForm form);

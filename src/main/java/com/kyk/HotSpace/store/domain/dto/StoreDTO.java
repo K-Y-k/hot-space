@@ -7,6 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class StoreDTO {
     private Long id;
+    private String category;
     private String name;
     private String address;
     private String number;

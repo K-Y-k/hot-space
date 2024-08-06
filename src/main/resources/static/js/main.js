@@ -45,39 +45,17 @@ function initMap() {
                 }
             });
 
+            // 현재 중심 반경 500m내에 등록된 가게 있는지 확인
             fetchMarkers(current_lat, current_lng)
-
 
             // 전역 infowindow 객체 초기화
             infoWindow = new naver.maps.InfoWindow({
                 anchorSkew: true
             });
 
-
             // 마커 클릭 이벤트 리스너 설정
             naver.maps.Event.addListener(marker, "click", function(e) {
-                var contentString = [
-                    '<div class="info_inner">',
-                    '   <h3>체인점 이름</h3>',
-                    '   <img src="./img/marker.png" width="55" height="55" class="thumb"/> <br>',
-                    '   <p>',
-                    '       <h6>주소</h6>',
-                    '       <h6>연락처</h6>',
-                    '       <div class="button-container">',
-                    '           <button class="btn btn-secondary">테이블 확인</button>',
-                    '           <button class="btn btn-secondary">예약하기</button>',
-                    '       </div>',
-                    '       <a href="http://www.seoul.go.kr" target="_blank">www.seoul.go.kr/</a>',
-                    '   </p>',
-                    '</div>'
-                ].join('');
-
-                if (infoWindow.getMap()) {
-                    infoWindow.close();
-                } else {
-                    infoWindow.setContent(contentString);
-                    infoWindow.open(map, marker);
-                }
+                searchCoordinateToAddress(e.coord);
             });
 
             // 맵 클릭시 해당 위치의 정보
@@ -85,12 +63,13 @@ function initMap() {
                 searchCoordinateToAddress(e.coord);
             });
 
-            // 지도 이동 이벤트 리스너
+            // 지도 이동시 이벤트 리스너
             naver.maps.Event.addListener(map, 'center_changed', function() {
                 if (debounceTimer) {
                     clearTimeout(debounceTimer);
                 }
 
+                // 한번만 동작하게 설정
                 debounceTimer = setTimeout(function() {
                     var center = map.getCenter();
                     center_lat = center.lat();
