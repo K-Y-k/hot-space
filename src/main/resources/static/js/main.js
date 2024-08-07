@@ -38,7 +38,7 @@ function initMap() {
                 position: position,
                 map: map,
                 icon: {
-                    url: "/img/marker.png",
+                    url: "/img/main/marker.png",
                     scaledSize: new naver.maps.Size(40, 40),
                     origin: new naver.maps.Point(0, 0),
                     anchor: new naver.maps.Point(35, 85)
@@ -103,4 +103,18 @@ $(document).ready(function() {
 // 시설 종류가 선택되었을 때의 이벤트
 document.getElementById('category').addEventListener('change', function(event) {
     fetchMarkers(center_lat, center_lng)
+});
+
+
+// 마우스 가리킬시 이벤트
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('mouseover', function() {
+        this.classList.remove('text-white');
+        this.classList.add('hovered');
+    });
+
+    link.addEventListener('mouseout', function() {
+        this.classList.remove('hovered');
+        this.classList.add('text-white');
+    });
 });

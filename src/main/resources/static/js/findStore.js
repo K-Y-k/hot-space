@@ -38,7 +38,7 @@ function fetchMarkers(center_lat, center_lng) {
                             var contentString = `
                                 <div class="info_inner">
                                     <h3>${storeDetailResult.name}</h3>
-                                    <img src="./img/marker.png" width="55" height="55" class="thumb"/> <br>
+                                    <img src="./img/main/marker.png" width="55" height="55" class="thumb"/> <br>
                                     <p>
                                         <h6>주소: ${storeDetailResult.address}</h6>
                                         <h6>연락처: ${storeDetailResult.number}</h6>

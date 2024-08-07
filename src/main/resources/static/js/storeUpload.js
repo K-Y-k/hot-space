@@ -21,7 +21,7 @@ function initMap() {
                 position: position,
                 map: map,
                 icon: {
-                    url: "/img/marker.png",
+                    url: "/img/main/marker.png",
                     scaledSize: new naver.maps.Size(40, 40),
                     origin: new naver.maps.Point(0, 0),
                     anchor: new naver.maps.Point(20, 40)
