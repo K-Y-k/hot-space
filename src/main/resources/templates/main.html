@@ -23,29 +23,92 @@
 </head>
 
 <body>
-    <div id="map" style="width:50%; height:50%;"></div>
+<div class="flex-background">
+    <nav class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <img src="/img/main/fire.png" style="width: 40px; height: 40px;" class="bi pe-none me-2"/>
+            <span style="font-size: 1.5rem;">HotSpace</span>
+        </a>
 
-    <br>
+        <hr>
 
-    <button th:if="${session.loginMember == null}"
-            class="btn btn-primary flex-grow-1 mx-1" id="loginButton"
-            th:onclick="|location.href='@{/members/login}'|">로그인</button>
+        <ul class="nav nav-pills flex-column mb-auto" style="font-size: 1.0rem;">
+            <li class="nav-item">
+                <a href="/" class="nav-link text-white" style="font-size: 1.1rem;">
+                    <img src="/img/main/home_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
+                    Home
+                </a>
+            </li>
 
-    <form th:action="@{/members/logout}" method="post">
-        <button th:if="${session.loginMember != null}"
-                type="submit" class="btn btn-primary flex-grow-1 mx-1" id="logoutButton"
-                th:onclick="@{/members/logout}">로그아웃
-        </button>
-    </form>
+            <li class="nav-item">
+                <a th:href="@{/stores/upload}" class="nav-link text-white">
+                    <img src="/img/main/store_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
+                    가게 등록
+                </a>
+            </li>
 
-    <button th:if="${session.loginMember != null}"
-            class="btn btn-primary flex-grow-1 mx-1" id="storeButton"
-            th:onclick="|location.href='@{/stores/upload}'|">가게 등록</button>
+            <li class="nav-item"
+                th:if="${session.loginMember == null}">
+                <a th:href="@{/members/login}" class="nav-link text-white">
+                    <img src="/img/main/login_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
+                    로그인
+                </a>
+            </li>
+        </ul>
 
-    <button class="btn btn-primary flex-grow-1 mx-1" id="moveToCurrentLocation">내 위치</button>
+        <hr>
+
+        <div th:if="${session.loginMember != null}" class="dropdown">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://github.com/mdo.png" width="32" height="32" class="rounded-circle me-2">
+                <strong th:text="${session.loginMember.name}" style="font-size: 1.0rem;"></strong>
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                <li><a class="dropdown-item" href="#">프로필</a></li>
+
+                <li><hr class="dropdown-divider"></li>
+
+                <li>
+                    <form th:action="@{/members/logout}" method="post" style="display:none;" id="logoutForm">
+                        <input type="hidden"/>
+                    </form>
+                    <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit();">로그아웃</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="category-form">
+            <select class="form-select" id="category">
+                <option value="">시설 종류 선택</option>
+                <option value="식당">식당</option>
+                <option value="편의점">편의점</option>
+                <option value="카페">카페</option>
+                <option value="PC방">PC방</option>
+                <option value="오락시설">오락시설</option>
+                <option value="운동시설">운동시설</option>
+                <option value="술집">술집</option>
+                <option value="기타">기타</option>
+            </select>
+        </div>
+
+        <div class="address_search">
+            <input type="text" id="address" class="form-control" placeholder="이동할 주소 입력하세요"
+                   onkeydown="handleEnter(event)">
+        </div>
+
+        <button class="btn btn-primary flex-grow-1 mx-1" id="moveToCurrentLocation">내 위치</button>
+
+        <div id="map"></div>
+    </main>
+</div>
+
 </body>
 
 <script src="/js/main.js"></script>
 <script src="/js/infoWindow.js"></script>
 <script src="/js/address.js"></script>
+<script src="/js/findStore.js"></script>
 </html>

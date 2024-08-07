@@ -1,2 +1,4 @@
-package com.kyk.HotSpace.store.service;public class StoreUpdateForm {
+package com.kyk.HotSpace.store.domain.dto;
+
+public class StoreUpdateForm {
 }

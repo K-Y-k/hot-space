@@ -1,8 +1,8 @@
 // 클릭한 위치의 주소 등의 정보를 정보창에 출력
 function searchCoordinateToAddress(latlng) {
     console.log("latlng=", latlng);
-    click_lat = latlng.lat();
-    click_lng = latlng.lng();
+    var click_lat = latlng.lat();
+    var click_lng = latlng.lng();
 
     // naver.maps.Service.reverseGeocode 메서드를 호출하여 좌표를 주소로 변환
     naver.maps.Service.reverseGeocode({
@@ -17,26 +17,21 @@ function searchCoordinateToAddress(latlng) {
 
         // 결과를 items 배열에 저장
         var items = response.v2.results
-
-        // 변환된 각 주소를 반복 처리하여 htmlAddresses 배열에 추가
         item = items[0];
+
+        // 변환된 각 주소를 처리하여 htmlAddresses 배열에 추가
         var address = makeAddress(item);
         addrType = item.name === 'roadaddr' ? '[도로명 주소]' : '';
 
 
+        // 가공한 html에 변환된 주소 넣음
         var contentString = [
             '<div class="info_inner">',
-            '   <h3>체인점 이름</h3>',
-            '   <img src="./img/marker.png" width="55" height="55" class="thumb"/> <br>',
+            '   <br>',
             '   <p>',
             '     ' + addrType + ' ' + address,
-            '       <h6>연락처</h6>',
-            '       <div class="button-container">',
-            '           <button class="btn btn-secondary">테이블 확인</button>',
-            '           <button class="btn btn-secondary">예약하기</button>',
-            '       </div>',
-            '       <a href="http://www.seoul.go.kr" target="_blank">www.seoul.go.kr/</a>',
             '   </p>',
+            '   <br>',
             '</div>'
         ].join('');
 
@@ -49,30 +44,4 @@ function searchCoordinateToAddress(latlng) {
             infoWindow.open(map, latlng);
         }
     });
-}
-
-
-function getInfoWindowContent(latlng) {
-    var items = response.v2.results;
-    var item = items[0];
-    var address = makeAddress(item);
-    var addrType = item.name === 'roadaddr' ? '[도로명 주소]' : '';
-
-    var contentString = [
-        '<div class="info_inner">',
-        '   <h3>체인점 이름</h3>',
-        '   <img src="./img/marker.png" width="55" height="55" class="thumb"/> <br>',
-        '   <p>',
-        '     ' + addrType + ' ' + address,
-        '       <h6>연락처</h6>',
-        '       <div class="button-container">',
-        '           <button class="btn btn-secondary">테이블 확인</button>',
-        '           <button class="btn btn-secondary">예약하기</button>',
-        '       </div>',
-        '       <a href="http://www.seoul.go.kr" target="_blank">www.seoul.go.kr/</a>',
-        '   </p>',
-        '</div>'
-    ].join('');
-
-    return contentString;
 }

@@ -14,7 +14,14 @@
 </head>
 
 <body>
-<div id="map" style="width:50%; height:50%;"></div>
+  <div id="map" style="width:50%; height:50%;"></div>
+
+  <div class="location_find">
+    <input type="text" id="address" class="form-control" placeholder="이동할 주소 입력하세요"
+             onkeydown="handleEnter(event)">
+
+    <button class="btn btn-primary" id="moveToCurrentLocation">내 위치</button>
+  </div>
 
   <div class="container">
     <div class="row justify-content-center">
@@ -27,22 +34,42 @@
           <div class="card-body">
             <form action="" th:action th:object="${uploadForm}" method="post">
               <div class="mb-3">
-                <input type="text" id="store-name" th:field="*{name}" class="form-control" placeholder="가게명">
-                <div class="field-error" style="color: red;" th:errors="*{name}"></div>
+                <select th:field="*{category}" class="form-select" th:errorclass="field-error">
+                  <option value="">시설 종류 선택</option>
+                  <option th:value="식당">식당</option>
+                  <option th:value="편의점">편의점</option>
+                  <option th:value="카페">카페</option>
+                  <option th:value="PC방">PC방</option>
+                  <option th:value="오락시설">오락시설</option>
+                  <option th:value="운동시설">운동시설</option>
+                  <option th:value="술집">술집</option>
+                  <option th:value="기타">기타</option>
+                </select>
+              </div>
+              <div style="color: red;" th:errors="*{category}"></div>
+
+              <div class="mb-3">
+                <input type="text" id="store-name" th:field="*{name}" class="form-control" placeholder="가게명"
+                       th:errorclass="field-error">
+                <div style="color: red;" th:errors="*{name}"></div>
               </div>
 
               <div class="mb-3">
-                <input type="text" id="store-number" th:field="*{number}" class="form-control" placeholder="연락처 ex) 9999-9999-9999">
-                <div class="field-error" style="color: red;" th:errors="*{number}"></div>
+                <input type="text" id="store-number" th:field="*{number}" class="form-control" placeholder="연락처 ex) 9999-9999-9999"
+                       th:errorclass="field-error">
+                <div style="color: red;" th:errors="*{number}"></div>
               </div>
 
               <div class="mb-3">
-                <input type="text" th:field="*{siteUrl}" class="form-control" placeholder="홍보 사이트 url"
-                       th:errorclass="field-error" style="width: 350px;">
-                <div class="field-error" style="color: red;" th:errors="*{siteUrl}"></div>
+                <input type="text" id="store-url" th:field="*{siteUrl}" class="form-control" placeholder="홍보 사이트 url (없으면 공백)">
               </div>
 
               <br>
+
+              <input type="hidden" id="store-address" th:field="*{address}">
+              <input type="hidden" id="latitude" th:field="*{latitude}">
+              <input type="hidden" id="longitude" th:field="*{longitude}">
+              <div style="color: red;" th:errors="*{latitude}"></div>
 
               <div class="col">
                 <button class="w-100 btn btn-primary" id="register-btn" type="submit">등록</button>
@@ -51,11 +78,6 @@
                         type="button">취소
                 </button>
               </div>
-
-              <input type="hidden" id="store-address" th:field="*{address}">
-              <input type="hidden" id="latitude" th:field="*{latitude}">
-              <input type="hidden" id="longitude" th:field="*{longitude}">
-              <div class="field-error" style="color: red;" th:errors="*{latitude}"></div>
             </form>
           </div>
         </div>
