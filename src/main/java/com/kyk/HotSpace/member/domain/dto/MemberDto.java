@@ -14,4 +14,5 @@ public class MemberDto {
     private Long id;
     private String name;
     private Role role;
+    private String storedFileName;
 }

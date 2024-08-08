@@ -2,6 +2,8 @@ package com.kyk.HotSpace.member.service;
 
 import com.kyk.HotSpace.exception.member.DuplicatedException;
 import com.kyk.HotSpace.exception.member.MemberNotFoundException;
+import com.kyk.HotSpace.file.domain.ProfileFile;
+import com.kyk.HotSpace.file.repository.member.ProfileFileRepository;
 import com.kyk.HotSpace.member.domain.dto.JoinForm;
 import com.kyk.HotSpace.member.domain.dto.MemberDto;
 import com.kyk.HotSpace.member.domain.dto.UpdateForm;
@@ -9,24 +11,70 @@ import com.kyk.HotSpace.member.domain.entity.Member;
 import com.kyk.HotSpace.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
+    private final ProfileFileRepository profileFileRepository;
+
+    @Value("${file.profileLocation}")
+    private String profileLocation;
 
     @Override
-    public Long join(JoinForm form) {
+    public Long join(JoinForm form) throws IOException {
         Member memberEntity = form.toEntity();
 
         // 닉네임/아이디 중복 회원 검증 로직
         validateDuplicateMember(memberEntity);
 
+        // 회원 엔티티 저장
         Member saveMember = memberRepository.saveMember(memberEntity);
+
+        // 프로필 사진 저장
+        MultipartFile profileImage = form.getProfileImage();
+        uploadProfileFile(profileImage, memberEntity);
+
         return saveMember.getId();
     }
+
+    private void uploadProfileFile(MultipartFile profileImage, Member memberEntity) throws IOException {
+        // 오리지널, 실제 파일 이름 초기화
+        String originalFileName = "default_icon.PNG";
+        String storedFileName = "default_icon.PNG";
+
+        // 빈 파일 검증 로직
+        if (!profileImage.getOriginalFilename().isBlank()) {
+            // 오리지널 파일 이름 지정
+            originalFileName = profileImage.getOriginalFilename();
+            
+            // 파일에 이름을 붙일 랜덤으로 식별자 지정
+            UUID uuid = UUID.randomUUID();
+            storedFileName = uuid + "_" + originalFileName;
+            String savePath = profileLocation;
+
+            // 실제 파일 저장 경로와 파일 이름 지정한 File 객체 생성 및 저장
+            profileImage.transferTo(new File(savePath, storedFileName));
+        }
+
+        // 프로필 파일 엔티티 저장
+        ProfileFile profileFile = ProfileFile.builder()
+                    .originalFileName(originalFileName)
+                    .storedFileName(storedFileName)
+                    .member(memberEntity)
+                    .build();
+
+        profileFileRepository.saveProfile(profileFile);
+    }
+
 
     // 중복 검증 로직
     private void validateDuplicateMember(Member memberEntity) {
@@ -54,7 +102,9 @@ public class MemberServiceImpl implements MemberService{
                 .filter(m -> m.getPassword().equals(password))
                 .orElseThrow(() -> new MemberNotFoundException("아이디 또는 패스워드가 일치하지 않습니다."));
 
-        return new MemberDto(loginMember.getId(), loginMember.getName(), loginMember.getRole());
+        log.info("로그인 중 프로필 사진 = {}", loginMember.getProfileFile().getStoredFileName());
+
+        return new MemberDto(loginMember.getId(), loginMember.getName(), loginMember.getRole(), loginMember.getProfileFile().getStoredFileName());
     }
 
 
@@ -63,7 +113,7 @@ public class MemberServiceImpl implements MemberService{
         Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("회원 찾기 실패: 회원을 찾을 수 없습니다." + memberId));
 
-        return new MemberDto(findMember.getId(), findMember.getName(),  findMember.getRole());
+        return new MemberDto(findMember.getId(), findMember.getName(),  findMember.getRole(), findMember.getProfileFile().getStoredFileName());
     }
 
 
