@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 
 <head>
   <meta charset="UTF-8">
@@ -12,55 +12,80 @@
 </head>
 
 <body>
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header text-center">
-          <h4>회원가입</h4>
-        </div>
+<div class="flex-background">
+  <nav class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+      <img src="/img/main/fire.png" style="width: 40px; height: 40px;" class="bi pe-none me-2"/>
+      <span style="font-size: 1.5rem;">HotSpace</span>
+    </a>
 
-        <div style="display: flex; justify-content: center; align-items: center;">
-          <img id="thumbnail"
-               src="/img/main/user_icon.png"
-               class="rounded-circle"
-               style="width: 15vw; height: 23vh;">
-        </div>
+    <hr>
 
-        <div class="card-body">
-          <form action="" th:action th:object="${joinForm}" method="post" enctype="multipart/form-data">
-            <input class="form-control mt-2" id="InputImage" type="file" name="profileImage" onchange="readURL(this)">
+    <ul class="nav nav-pills flex-column mb-auto" style="font-size: 1.0rem;">
+      <li class="nav-item">
+        <a href="/" class="nav-link text-white" style="font-size: 1.1rem;">
+          <img src="/img/main/home_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
+          Home
+        </a>
+      </li>
+    </ul>
 
-            <div class="form-group">
-              <input type="text" class="form-control" id="member-name" th:field="*{name}" placeholder="닉네임(2~7글자)"
-                     th:errorclass="field-error">
-              <div class="field-error" style="color: red;" th:errors="*{name}"></div>
+    <hr>
+  </nav>
+
+  <main>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card" style="top: 3%;">
+            <div class="card-header text-center">
+              <h4>회원가입</h4>
             </div>
 
-            <div class="form-group">
-              <input type="text" class="form-control" id="member-loginId" th:field="*{loginId}" placeholder="아이디(3~10글자)"
-                     th:errorclass="field-error">
-              <div class="field-error" style="color: red;" th:errors="*{loginId}"></div>
-            </div>
+            <div class="card-body">
+              <form action="" th:action th:object="${joinForm}" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                  <div style="display: flex; justify-content: center; align-items: center;">
+                    <img id="thumbnail"
+                         src="/img/main/user_icon.png"
+                         class="rounded-circle"
+                         style="width: 30%; height: 45%;">
+                  </div>
+                  <input class="form-control mt-2" id="InputImage" type="file" name="profileImage" onchange="readURL(this)">
+                </div>
 
-            <div class="form-group">
-              <input type="password" class="form-control" th:field="*{password}" placeholder="비밀번호(3~10글자)"
-                     th:errorclass="field-error">
-              <div class="field-error" style="color: red;" th:errors="*{password}"></div>
-            </div>
+                <div class="mb-3">
+                  <input type="text" class="form-control" id="member-name" th:field="*{name}" placeholder="닉네임(2~7글자)"
+                         th:errorclass="field-error">
+                  <div class="error-sign" th:errors="*{name}"></div>
+                </div>
 
-            <div class="col">
-              <button class="w-100 btn btn-primary" id="register-btn" type="submit">회원가입</button>
-              <button class="w-100 btn btn-secondary btn-lg" onclick="location.href='index.html'"
-                      th:onclick="|location.href='@{/}'|"
-                      type="button">취소
-              </button>
+                <div class="mb-3">
+                  <input type="text" class="form-control" id="member-loginId" th:field="*{loginId}" placeholder="아이디(3~10글자)"
+                         th:errorclass="field-error">
+                  <div class="error-sign" th:errors="*{loginId}"></div>
+                </div>
+
+                <div class="mb-3">
+                  <input type="password" class="form-control" th:field="*{password}" placeholder="비밀번호(3~10글자)"
+                         th:errorclass="field-error">
+                  <div class="error-sign" th:errors="*{password}"></div>
+                </div>
+
+                <div>
+                  <button class="w-100 btn btn-primary" id="register-btn" type="submit">회원가입</button>
+                  <button class="w-100 btn btn-secondary" onclick="location.href='index.html'"
+                          th:onclick="|location.href='@{/}'|"
+                          type="button">취소
+                  </button>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </div>
 
 

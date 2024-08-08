@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 
 <head>
   <meta charset="UTF-8">
@@ -12,44 +12,72 @@
 </head>
 
 <body>
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header text-center">
-          <h4>로그인</h4>
+<div class="flex-background">
+  <nav class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+      <img src="/img/main/fire.png" style="width: 40px; height: 40px;" class="bi pe-none me-2"/>
+      <span style="font-size: 1.5rem;">HotSpace</span>
+    </a>
+
+    <hr>
+
+    <ul class="nav nav-pills flex-column mb-auto" style="font-size: 1.0rem;">
+      <li class="nav-item">
+        <a href="/" class="nav-link text-white" style="font-size: 1.1rem;">
+          <img src="/img/main/home_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
+          Home
+        </a>
+      </li>
+    </ul>
+
+    <hr>
+  </nav>
+
+  <main>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header text-center">
+              <h4>로그인</h4>
+            </div>
+
+            <div class="card-body">
+              <form action="" th:action th:object="${loginForm}" method="post">
+                <div class="mb-3">
+                  <input type="text" class="form-control"
+                         id="loginId" th:field="*{loginId}" placeholder="아이디"
+                         th:errorclass="field-error">
+                  <div class="error-sign" th:errors="*{loginId}"></div>
+                </div>
+
+                <div class="form-group">
+                  <input type="password" class="form-control"
+                         id="password" th:field="*{password}" placeholder="비밀번호"
+                         th:errorclass="field-error">
+                  <div class="error-sign" th:errors="*{password}"></div>
+                </div>
+
+                <br>
+
+                <div style="display: flex; justify-content: between;">
+                  <button type="submit" class="btn btn-primary flex-grow-1 mx-1">로그인</button>
+
+                  <a href="/members/join" class="flex-grow-1 mx-1">
+                    <button type="button" class="btn btn-primary w-100">회원가입</button>
+                  </a>
+                </div>
+              </form>
+            </div>
+
+            <!--                <div class="card-footer text-center">-->
+            <!--                    <a href="#">Forgot password?</a>-->
+            <!--                </div>-->
+         </div>
         </div>
-
-        <div class="card-body">
-          <form action="" th:action th:object="${loginForm}" method="post">
-            <div class="form-group">
-              <input type="text" class="form-control"
-                     id="loginId" th:field="*{loginId}" placeholder="아이디">
-              <div class="field-error" style="color: red;" th:errors="*{loginId}"></div>
-            </div>
-
-            <div class="form-group">
-              <input type="password" class="form-control"
-                     id="password" th:field="*{password}" placeholder="비밀번호">
-              <div class="field-error" style="color: red;" th:errors="*{password}"></div>
-            </div>
-
-            <div class="container mt-3 d-flex justify-content-between">
-              <button type="submit" class="btn btn-primary flex-grow-1 mx-1">로그인</button>
-
-              <a href="/members/join" class="flex-grow-1 mx-1">
-                <button type="button" class="btn btn-primary w-100">회원가입</button>
-              </a>
-            </div>
-          </form>
-        </div>
-
-        <!--                <div class="card-footer text-center">-->
-        <!--                    <a href="#">Forgot password?</a>-->
-        <!--                </div>-->
       </div>
     </div>
-  </div>
+  </main>
 </div>
 
 

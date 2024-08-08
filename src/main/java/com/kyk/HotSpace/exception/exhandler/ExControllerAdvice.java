@@ -50,7 +50,7 @@ public class ExControllerAdvice {
 
 
         modelAndView.addObject("message", ex.getMessage());
-        modelAndView.addObject("redirectUrl", "/");
+        modelAndView.addObject("redirectUrl", "/members/login");
         modelAndView.setViewName("messages");
 
         return modelAndView;
