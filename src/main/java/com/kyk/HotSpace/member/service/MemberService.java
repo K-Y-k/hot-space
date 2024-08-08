@@ -4,8 +4,10 @@ import com.kyk.HotSpace.member.domain.dto.JoinForm;
 import com.kyk.HotSpace.member.domain.dto.MemberDto;
 import com.kyk.HotSpace.member.domain.dto.UpdateForm;
 
+import java.io.IOException;
+
 public interface MemberService {
-    Long join(JoinForm form);
+    Long join(JoinForm form) throws IOException;
 
     MemberDto login(String loginId, String password);
 

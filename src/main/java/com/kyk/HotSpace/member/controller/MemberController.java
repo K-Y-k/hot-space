@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Slf4j
 @Controller
@@ -38,10 +39,12 @@ public class MemberController {
     @PostMapping("/join")
     public String save(@Valid @ModelAttribute("joinForm") JoinForm form,
                        BindingResult bindingResult,
-                       Model model) {
+                       Model model) throws IOException {
         if (bindingResult.hasErrors()) {
             return "members/member_join";
         }
+
+        log.info("회원가입 중 프로필 사진 오리지널 이름 = {}", form.getProfileImage().getOriginalFilename());
 
         memberService.join(form);
         model.addAttribute("message", "회원가입 되었습니다!");
