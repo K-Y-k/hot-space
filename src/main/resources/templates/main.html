@@ -3,23 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <!--부트 스트랩 적용-->
+    <!-- 부트 스트랩 css 적용 -->
     <link th:href="@{/css/bootstrap.min.css}"
           href="../css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 
-    <!--네이버 지도-->
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=z544ho7mtf&submodules=geocoder"></script>
-
-    <!--css 적용-->
+    <!-- css 적용 -->
     <link rel="stylesheet" type="text/css" href="../css/main_style.css" th:href="@{/css/main_style.css}">
-
-    <!--jquery-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-            crossorigin="anonymous">
-    </script>
 </head>
 
 <body>
@@ -60,7 +49,14 @@
 
         <div th:if="${session.loginMember != null}" class="dropdown">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" width="32" height="32" class="rounded-circle me-2">
+                <img th:if="${session.loginMember.storedFileName == 'default_icon.PNG'}"
+                     src="/img/main/user_icon.png"
+                     width="32" height="32" class="rounded-circle me-2">
+
+                <img th:if="${session.loginMember.storedFileName != 'default_icon.PNG'}"
+                     th:src="@{|/profileImageUpload/${session.loginMember.storedFileName}|}"
+                     width="32" height="32" class="rounded-circle me-2">
+
                 <strong th:text="${session.loginMember.name}" style="font-size: 1.0rem;"></strong>
             </a>
 
@@ -107,8 +103,23 @@
 
 </body>
 
+
+<!-- 부트스트랩 JS, Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+<!-- jquery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous">
+</script>
+
+<!-- 네이버 지도 -->
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=z544ho7mtf&submodules=geocoder"></script>
+
 <script src="/js/main.js"></script>
 <script src="/js/infoWindow.js"></script>
 <script src="/js/address.js"></script>
 <script src="/js/findStore.js"></script>
+
 </html>
