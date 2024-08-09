@@ -1,6 +1,6 @@
 package com.kyk.HotSpace.file.domain;
 
-import com.kyk.HotSpace.member.domain.entity.Member;
+import com.kyk.HotSpace.store.domain.entity.Store;
 import com.kyk.HotSpace.web.BaseTimeEntity;
 import lombok.*;
 
@@ -11,26 +11,26 @@ import javax.persistence.*;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor
-public class ProfileFile extends BaseTimeEntity {
+public class StoreFile extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "profileFile_id")
+    @Column(name = "storeFile_id")
     private Long id;
 
     private String originalFileName;
 
     private String storedFileName;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
 
 
-    public static ProfileFile toProfileFileEntity(Member member, String originalFileName, String storedFileName) {
-        return ProfileFile.builder()
+    public static StoreFile toStoreFileEntity(Store store, String originalFileName, String storedFileName) {
+        return StoreFile.builder()
                 .originalFileName(originalFileName)
                 .storedFileName(storedFileName)
-                .member(member)
+                .store(store)
                 .build();
     }
 }

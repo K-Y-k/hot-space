@@ -1,16 +1,16 @@
 package com.kyk.HotSpace.store.service;
 
-import com.kyk.HotSpace.store.domain.dto.StoreDTO;
 import com.kyk.HotSpace.store.domain.dto.StoreUploadForm;
 import com.kyk.HotSpace.store.domain.dto.StoreUpdateForm;
 import com.kyk.HotSpace.store.domain.entity.Store;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 public interface StoreService {
     Optional<Store> findById(Long id);
-    Long saveStore(Long memberId, StoreUploadForm form);
+    Long saveStore(Long memberId, StoreUploadForm form) throws IOException;
 
     void changeStore(Long memberId, StoreUpdateForm form);
 

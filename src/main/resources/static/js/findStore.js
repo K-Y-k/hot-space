@@ -38,7 +38,7 @@ function fetchMarkers(center_lat, center_lng) {
                             var contentString = `
                                 <div class="info_inner">
                                     <h3>${storeDetailResult.name}</h3>
-                                    <img src="./img/main/marker.png" width="55" height="55" class="thumb"/> <br>
+                                    <img src="/storeFileImageUpload/${storeDetailResult.imageFileName[0]}" width="55" height="55" class="thumb"/> <br>
                                     <p>
                                         <h6>주소: ${storeDetailResult.address}</h6>
                                         <h6>연락처: ${storeDetailResult.number}</h6>
@@ -46,7 +46,7 @@ function fetchMarkers(center_lat, center_lng) {
                                             <button class="btn btn-secondary">테이블 확인</button>
                                             <button class="btn btn-secondary">예약하기</button>
                                         </div>
-                                        <a href="${storeDetailResult.siteUrl}" target="_blank">${storeDetailResult.siteUrl}</a>
+                                        <a href="https://${storeDetailResult.siteUrl}" target="_blank">운영 사이트</a>
                                     </p>
                                 </div>
                             `;

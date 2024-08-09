@@ -1,6 +1,5 @@
 package com.kyk.HotSpace.store.repository;
 
-import com.kyk.HotSpace.store.domain.dto.StoreDTO;
 import com.kyk.HotSpace.store.domain.entity.Store;
 
 import java.util.List;

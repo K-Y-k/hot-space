@@ -1,13 +1,16 @@
-html, body {
-    width: 100%;
-    height: 100%;
+.flex-background {
     display: flex;
-    justify-content: center;
-    align-items: center;
 }
-
-.field-error {
-    border: 1px solid red;
+nav {
+    position: relative;
+    width: 20vw;
+    height: 100vh;
+}
+main {
+    display: flex;
+    position: relative;
+    width: 80vw;
+    height: 100vh;
 }
 
 .location_find {
@@ -16,11 +19,36 @@ html, body {
 
     position: absolute;
     top: 13%;
-    left: 3%;
+    left: 2%;
     padding: 10px;
 }
-
 #moveToCurrentLocation {
     width: 100px;
     padding: 10px;
+}
+#map {
+    position: absolute;
+    top: 27%;
+    left: 3%;
+
+    width: 48%;
+    height: 50%;
+}
+
+
+.container {
+    position: absolute;
+    top: 3%;
+    left: 40%;
+
+    width: 65%;
+    font-size: 1.0rem;
+}
+
+.field-error {
+    border: 1px solid red;
+}
+.error-sign {
+    color: red;
+    font-size: 0.8rem;
 }

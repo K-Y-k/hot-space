@@ -17,11 +17,18 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${profileFile.dir}")  // 프로퍼티에 설정한 file.dir 값을 읽어온다.
     String profileFileUploadPath;
 
+    @Value("${storeFile.dir}")
+    String storeFileUploadPath;
+
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/profileImageUpload/**")
                 // 웹 브라우저에 입력하는 url에 /profileImageUpload로 시작하는 경우 uploadPath에 설정한 폴더 기준으로 파일을 읽어오도록 설정
                 .addResourceLocations(profileFileUploadPath);
                 // 로컬 컴퓨터에 저장된 파일을 읽어올 root경로
+
+        registry.addResourceHandler("/storeFileImageUpload/**")
+                .addResourceLocations(storeFileUploadPath);
     }
 }
