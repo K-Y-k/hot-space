@@ -45,6 +45,7 @@ public class StoreController {
         log.info("가게 url = {}", form.getSiteUrl());
         log.info("가게 좌표 = {}, {}", form.getLatitude(), form.getLongitude());
         log.info("가게 주소 = {}", form.getAddress());
+        log.info("가게 이미지 파일 = {}", form.getImageFiles().get(0).getOriginalFilename());
 
         if (bindingResult.hasErrors()) {
             return "stores/store_upload";

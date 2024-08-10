@@ -35,28 +35,72 @@ function fetchMarkers(center_lat, center_lng) {
                         success: function(storeDetailResult) {
                             console.log(JSON.stringify(storeDetailResult))
 
+                            // 슬라이더 HTML 생성
+                            var slides = storeDetailResult.imageFileName.map(fileName => `
+                                <div class="swiper-slide">
+                                    <img src="/storeFileImageUpload/${fileName}" class="thumb"/>
+                                </div>
+                            `).join('');
+
                             var contentString = `
+                                <br>
+                                <button class="close-btn" style="float: right;">X</button>
+                                <br>
+
                                 <div class="info_inner">
                                     <h3>${storeDetailResult.name}</h3>
-                                    <img src="./img/main/marker.png" width="55" height="55" class="thumb"/> <br>
-                                    <p>
-                                        <h6>주소: ${storeDetailResult.address}</h6>
-                                        <h6>연락처: ${storeDetailResult.number}</h6>
-                                        <div class="button-container">
-                                            <button class="btn btn-secondary">테이블 확인</button>
-                                            <button class="btn btn-secondary">예약하기</button>
+
+                                    <br>
+
+                                    <div class="swiper-container">
+                                        <div class="swiper-wrapper">
+                                            ${slides}
                                         </div>
-                                        <a href="${storeDetailResult.siteUrl}" target="_blank">${storeDetailResult.siteUrl}</a>
-                                    </p>
+
+                                        <div class="swiper-button-next"></div>
+                                        <div class="swiper-button-prev"></div>
+                                        <div class="swiper-pagination"></div>
+                                    </div>
+
+                                    <br>
+                                    <br>
+                                    <br>
+
+                                    <h6>${storeDetailResult.address}</h6>
+                                    <h6>${storeDetailResult.number}</h6>
+                                    <a href="https://${storeDetailResult.siteUrl}" target="_blank">운영 사이트</a>
+
+                                    <br>
+                                    <br>
+
+                                    <div class="button-container">
+                                        <button class="btn btn-primary" style="width: 50%; height: 20%;">테이블</button>
+                                        <button class="btn btn-secondary" style="width: 50%; height: 20%;">예약</button>
+                                    </div>
                                 </div>
                             `;
 
-                            if (infoWindow.getMap()) {
-                                infoWindow.close();
-                            } else {
-                                infoWindow.setContent(contentString);
-                                infoWindow.open(map, findStoreMarker);
-                            }
+                            // <aside> 태그에 정보 출력
+                            document.getElementById('info').innerHTML = contentString;
+
+                            // Swiper 초기화
+                            var swiper = new Swiper('.swiper-container', {
+                                slidesPerView: 1,
+                                spaceBetween: 10,
+                                pagination: {
+                                    el: '.swiper-pagination',
+                                    clickable: true,
+                                },
+                                navigation: {
+                                    nextEl: '.swiper-button-next',
+                                    prevEl: '.swiper-button-prev',
+                                },
+                            });
+
+                            // 닫기 버튼 클릭 이벤트 핸들러
+                            document.querySelector('.close-btn').addEventListener('click', function() {
+                                document.getElementById('info').innerHTML = '';
+                            });
                         },
                         error: function (status, error) {
                             console.log("오류", status, error);

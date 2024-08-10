@@ -66,12 +66,7 @@ public class MemberServiceImpl implements MemberService {
         }
 
         // 프로필 파일 엔티티 저장
-        ProfileFile profileFile = ProfileFile.builder()
-                    .originalFileName(originalFileName)
-                    .storedFileName(storedFileName)
-                    .member(memberEntity)
-                    .build();
-
+        ProfileFile profileFile = ProfileFile.toProfileFileEntity(memberEntity, originalFileName, storedFileName);
         profileFileRepository.saveProfile(profileFile);
     }
 
