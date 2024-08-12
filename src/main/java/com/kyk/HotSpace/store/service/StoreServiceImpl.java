@@ -12,6 +12,8 @@ import com.kyk.HotSpace.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -99,6 +101,11 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public List<Store> findMarkersWithinRadiusByCategory(double center_lat, double center_lng, double radiusIn, String category) {
         return storeRepository.findStoreWithinRadiusByCategory(center_lat, center_lng, radiusIn, category);
+    }
+
+    @Override
+    public Page<Store> findStoresByMemberId(Long memberId, Pageable pageable) {
+        return storeRepository.findStoresByMemberId(memberId, pageable);
     }
 
 }

@@ -2,6 +2,8 @@ package com.kyk.HotSpace.store.repository;
 
 import com.kyk.HotSpace.store.domain.entity.Store;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -41,5 +43,10 @@ public class SpringDataJpaStoreRepository implements StoreRepository{
     @Override
     public List<Store> findStoreWithinRadiusByCategory(double lat, double lng, double radius, String category) {
         return JPAStoreRepository.findStoreWithinRadiusByCategory(lat, lng, radius, category);
+    }
+
+    @Override
+    public Page<Store> findStoresByMemberId(Long memberId, Pageable pageable) {
+        return JPAStoreRepository.findStoresByMemberId(memberId, pageable);
     }
 }
