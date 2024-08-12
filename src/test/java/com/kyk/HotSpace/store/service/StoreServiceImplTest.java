@@ -10,12 +10,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Transactional
 @SpringBootTest
@@ -39,7 +44,7 @@ public class StoreServiceImplTest {
         Member member = new Member("memberA", "ID123", "pass123", Role.CUSTOMER);
         Member savedMember = memberRepository.saveMember(member);
 
-        Store store = new Store(1L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 15.33, 17.44, savedMember);
+        Store store = new Store(1L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 15.33, 17.44, savedMember, null, null);
 
         // when
         Store savedStore = storeRepository.save(store);
@@ -58,7 +63,7 @@ public class StoreServiceImplTest {
         Member member = new Member("memberA", "ID123", "pass123", Role.CUSTOMER);
         Member savedMember = memberRepository.saveMember(member);
 
-        Store store = new Store(1L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember);
+        Store store = new Store(1L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null);
         Store savedStore = storeRepository.save(store);
 
         // when
@@ -76,10 +81,10 @@ public class StoreServiceImplTest {
         Member member = new Member("memberA", "ID123", "pass123", Role.CUSTOMER);
         Member savedMember = memberRepository.saveMember(member);
 
-        Store store1 = new Store(1L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember);
+        Store store1 = new Store(1L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null);
         storeRepository.save(store1);
 
-        Store store2 = new Store(2L, "pc방", "가게2", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember);
+        Store store2 = new Store(2L, "pc방", "가게2", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null);
         Store savedStore2 = storeRepository.save(store2);
 
         // when
@@ -88,5 +93,32 @@ public class StoreServiceImplTest {
 
         // then
         assertThat(savedStore2.getId()).isEqualTo(findStore.getId());
+    }
+
+
+    @Test
+    @DisplayName("내가 등록한 가게 리스트")
+    void storeList() {
+        // given
+        Member member = new Member("memberA", "ID123", "pass123", Role.CUSTOMER);
+        Member savedMember = memberRepository.saveMember(member);
+
+        Store store1 = new Store(1L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null);
+        Store store2 = new Store(2L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null);
+        Store store3 = new Store(3L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null);
+        storeRepository.save(store1);
+        storeRepository.save(store2);
+        storeRepository.save(store3);
+
+        // when
+        Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "id"));
+        Page<Store> pageResult = storeRepository.findStoresByMemberId(savedMember.getId(), pageable);
+
+        // then
+        assertEquals(5, pageResult.getSize());          // 한 페이지의 최대 데이터 개수
+        assertEquals(3, pageResult.getContent().size()); // 한 페이지의 최대 데이터 개수 기준으로 포함된 데이터 크기
+        assertEquals(3, pageResult.getTotalElements());  // 총 데이터 크기
+        assertEquals(1, pageResult.getTotalPages());     // 현재 총 페이지 수
+        assertEquals(0, pageResult.getNumber());         // 현재 페이지 번호
     }
 }
