@@ -99,7 +99,7 @@
                         th:text="${#temporals.format(store.createdDate, 'yyyy-MM-dd')}"></td>
 
                     <td class="col-md-2">
-                        <a th:href="@{/stores/{storeId}/storeList(storeId=${store.id})}" class="flex-grow-1 mx-1">
+                        <a th:href="@{/seats/{storeId}/upload(storeId=${store.id})}" class="flex-grow-1 mx-1">
                             <button type="button" class="btn btn-primary w-100">좌석 배치</button>
                         </a>
                     </td>
