@@ -82,7 +82,7 @@ function saveSeatArrangement() {
 
     // AJAX 요청으로 서버에 배치된 좌석들의 정보를 전송
     $.ajax({
-        url: '/seats/api/upload',
+        url: '/seats/api/upload/' + storeId,
         type: 'POST',
         contentType: 'application/json', // 요청 데이터의 형식을 JSON으로 지정
         data: JSON.stringify(seats),     // 좌석 정보를 JSON 문자열로 변환하여 전송

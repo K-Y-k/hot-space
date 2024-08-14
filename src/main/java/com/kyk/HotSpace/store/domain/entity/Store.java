@@ -2,7 +2,7 @@ package com.kyk.HotSpace.store.domain.entity;
 
 import com.kyk.HotSpace.file.domain.StoreFile;
 import com.kyk.HotSpace.member.domain.entity.Member;
-import com.kyk.HotSpace.member.domain.entity.Role;
+import com.kyk.HotSpace.seat.domain.entity.Seat;
 import com.kyk.HotSpace.web.BaseTimeEntity;
 import lombok.*;
 
@@ -45,4 +45,7 @@ public class Store extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<StoreFile> storeFiles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Seat> seats = new ArrayList<>();
 }
