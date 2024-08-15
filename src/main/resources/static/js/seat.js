@@ -19,15 +19,16 @@ $(document).ready(function() {
             }).removeClass("ui-draggable-dragging") // 드래그 클래스 제거
               .addClass("cloned-seat");             // 복제 클래스 구분을 위해 추가
 
-            // 새로운 ID와 포지션 속성 설정
+            // 복사된 좌석 타입, 인원수, 포지션 속성 설정
             newSeat.attr("data-seatType", originalId);
+            newSeat.attr("data-capacity", 0);
             newSeat.attr("data-posx", posX);
             newSeat.attr("data-posy", posY);
 
             // seat-container에 추가
             $(".seat-container").append(newSeat);
 
-            // 추가된 좌석도 draggable 속성 유지
+            // 추가된 좌석도 드래그 속성 유지
             newSeat.draggable({
                 stop: function(event, ui) {
                     var dragPosX = ui.position.left;
@@ -36,7 +37,7 @@ $(document).ready(function() {
                     $(this).attr("data-posx", dragPosX);
                     $(this).attr("data-posy", dragPosY);
 
-                    removeSeat(this, posX, posY);
+                    removeSeat(this, dragPosX, dragPosY);
 
                     console.log("(Clone Drag) Seat Type: " + $(this).attr("data-seatType") + " Position X: " + dragPosX + " Position Y: " + dragPosY);
                 }
@@ -55,21 +56,34 @@ $(document).ready(function() {
         var seatType = $(this).attr('data-seatType');
         var tableCapacity = prompt("인원 수를 지정해주세요(숫자만 작성)");
 
-        if (tableCapacity !== null) {
+        if (tableCapacity !== null || tableCapacity.trim() != '') {
             $(this).attr("data-capacity", tableCapacity);
             $(this).text(tableCapacity);
 
-            console.log("Seat Type: " + seatType + " | Capacity: " + tableCapacity);
+            console.log("Capacity: " + tableCapacity);
         }
     });
 });
 
 
-// 좌석 배치 저장
+// 좌석 배치 저장 함수
 function saveSeatArrangement() {
+    var seats = [];
+    let isValid = true;
+
     // 배열에 드래그한 좌석들 모두 넣기
-    const seats = [];
     document.querySelectorAll('.cloned-seat').forEach(seat => {
+        // 테이블 유효성 확인
+        var tableCapacity = seat.getAttribute('data-capacity');
+
+        console.log("tableCapacity: ", tableCapacity)
+
+        if (tableCapacity === '0') { // getAttribute는 문자열로 받음
+            alert("모든 좌석의 인원 수를 지정해주세요.");
+            isValid = false;
+            return false;
+        }
+
         seats.push({
             seatType: seat.getAttribute('data-seatType'),
             posX: seat.getAttribute('data-posx'),
@@ -77,6 +91,11 @@ function saveSeatArrangement() {
             tableCapacity: seat.getAttribute('data-capacity'),
         });
     });
+
+    // 테이블 유효성 검사
+    if (!isValid) {
+        return;
+    }
 
     console.log(seats);
 
@@ -88,25 +107,90 @@ function saveSeatArrangement() {
         data: JSON.stringify(seats),     // 좌석 정보를 JSON 문자열로 변환하여 전송
         dataType: 'json',
         success: function(uploadResult) {
-            console.log('Seat arrangement saved:', uploadResult);
+            alert('저장되었습니다.');
+            window.location.href = '/stores/storeList';
         },
-        error: function(xhr, status, error) {
-            console.error('Error saving seat arrangement:', error);
+        error: function (status, error) {
+            console.log("오류", status, error);
         }
     });
 }
 
 
-// 좌석 벗어나면 삭제
+// 좌석 벗어나면 삭제 함수
 function removeSeat(seat, posX, posY) {
     var container = $(".seat-container");
     var containerOffset = container.offset();
     var containerWidth = container.width();
     var containerHeight = container.height();
 
-    // 좌석이 seat-container 밖으로 벗어났는지 확인
+
+    // 드래그한 좌석이 seat-container 밖으로 벗어나면 해당 좌석 삭제
     if (posX < 0 || posY < 0 || posX > containerWidth || posY > containerHeight) {
-        // 벗어나면 해당 좌석 삭제
         seat.remove();
     }
 }
+
+
+// 저장된 좌석 보여주기
+$(document).ready(function() {
+    $.ajax({
+        url: '/seats/api/seatList/' + storeId,
+        type: 'GET',
+        dataType: 'json',
+        success: function(seats) {
+            console.log(JSON.stringify(seats))
+
+            seats.forEach(seat => {
+                var seatElement = document.createElement('div');
+                // 저장시 포함되도록 clone 클래스로 설정
+                seatElement.classList.add('cloned-seat');
+                seatElement.classList.add('seat');
+
+                // seatType에 맞는 클래스 설정
+                if (seat.seatType === 'small') {
+                    seatElement.classList.add('small');
+                } else if (seat.seatType === 'medium') {
+                    seatElement.classList.add('medium');
+                } else if (seat.seatType === 'large') {
+                    seatElement.classList.add('large');
+                }
+
+                // 테이블 수용 인원 설정
+                seatElement.textContent = seat.tableCapacity;
+
+                // 테이블 위치와 속성 설정
+                seatElement.style.position = 'absolute';
+                seatElement.style.left = `${seat.posX}px`;
+                seatElement.style.top = `${seat.posY}px`;
+
+                seatElement.setAttribute('data-seatType', seat.seatType);
+                seatElement.setAttribute('data-posx', seat.posX);
+                seatElement.setAttribute('data-posy', seat.posY);
+                seatElement.setAttribute('data-capacity', seat.tableCapacity);
+
+                // 드래그 가능하도록 설정
+                $(seatElement).draggable({
+                    stop: function(event, ui) {
+                        var dragPosX = ui.position.left;
+                        var dragPosY = ui.position.top;
+
+                        $(this).attr("data-posx", dragPosX);
+                        $(this).attr("data-posy", dragPosY);
+
+                        removeSeat(this, dragPosX, dragPosY);
+
+                        console.log("Seat Type: " + $(this).attr("data-seatType") + " Position X: " + dragPosX + " Position Y: " + dragPosY);
+                    }
+                });
+
+                // 좌석을 seat-container에 추가
+                var container = document.querySelector('.seat-container');
+                container.appendChild(seatElement);
+            });
+        },
+        error: function (status, error) {
+            console.log("오류", status, error);
+        }
+    });
+});

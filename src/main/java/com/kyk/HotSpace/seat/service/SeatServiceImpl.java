@@ -8,12 +8,16 @@ import com.kyk.HotSpace.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class SeatServiceImpl implements SeatService {
     private final StoreRepository storeRepository;
     private final SeatRepository seatRepository;
@@ -41,6 +45,20 @@ public class SeatServiceImpl implements SeatService {
         Seat savedSeat = seatRepository.saveSeat(seatEntity);
 
         return savedSeat.getId();
+    }
+
+    @Override
+    public List<Seat> findSeatsByStoreId(Long storeId) {
+        return seatRepository.findByStoreId(storeId);
+    }
+
+    @Override
+    public void deleteAllByStoreId(Long storeId) {
+        // 이전에 저장된 좌석이 있는지 검증
+        Optional<Seat> findSeat = seatRepository.findFirstByStoreId(storeId);
+        if (findSeat.isPresent()) {
+            seatRepository.deleteAllByStoreId(storeId);
+        }
     }
 
 }

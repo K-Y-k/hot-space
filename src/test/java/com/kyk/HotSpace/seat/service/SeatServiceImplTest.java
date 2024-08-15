@@ -54,4 +54,55 @@ public class SeatServiceImplTest {
         assertThat(savedSeat.getId()).isEqualTo(seat1.getId());
     }
 
+    @Test
+    @DisplayName("등록한 가게에 좌석들의 첫번째 데이터 찾기")
+    void findFirstSeatByStoreId() {
+        // given
+        for (int i = 0; i < 3; i++) {
+            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+            seatRepository.saveSeat(newSeat);
+        }
+
+        // when
+        Optional<Seat> firstSeat = seatRepository.findFirstByStoreId(savedStore.getId());
+
+        // then
+        assertThat(firstSeat.isPresent()).isTrue();
+    }
+
+    @Test
+    @DisplayName("등록한 가게에 좌석들의 모든 데이터 찾기")
+    void findSeatsByStoreId() {
+        // given
+        for (int i = 0; i < 3; i++) {
+            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+            seatRepository.saveSeat(newSeat);
+        }
+
+        // when
+        List<Seat> seatList = seatRepository.findByStoreId(savedStore.getId());
+
+        // then
+        assertThat(seatList).hasSize(3);
+    }
+
+    @Test
+    @DisplayName("storeId에 해당하는 좌석 데이터 모두 삭제")
+    void deleteAllByStoreId() {
+        // given
+        Store store = new Store(null, "편의점", "ec편의점", "유성구~~대로", "010-0200-0200", "www.dasd.com", 40.2, 33.5, null, null, null);
+        Store savedStore = storeRepository.save(store);
+
+        for (int i = 0; i < 3; i++) {
+            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+            seatRepository.saveSeat(newSeat);
+        }
+
+        // when
+        seatRepository.deleteAllByStoreId(savedStore.getId());
+
+        // then
+        List<Seat> seatListAfterDeletion = seatRepository.findByStoreId(savedStore.getId());
+        assertThat(seatListAfterDeletion).isEmpty();
+    }
 }
