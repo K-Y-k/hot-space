@@ -68,14 +68,14 @@
     </nav>
 
     <main>
-        <!--게시판 테이블-->
+        <!--테이블-->
         <table class="table">
             <thead class="table-dark">
             <tr>
-                <th class="col-md-1" style="text-align: center; margin: 0 auto;"></th>
-                <th class="col-md-3" style="text-align: center; margin: 0 auto;">가게명</th>
+                <th class="col-md-2" style="text-align: center; margin: 0 auto;">가게명</th>
                 <th class="col-md-2" style="text-align: center; margin: 0 auto;">시설종류</th>
                 <th class="col-md-2" style="text-align: center; margin: 0 auto;">등록일</th>
+                <th class="col-md-2" style="text-align: center; margin: 0 auto;"></th>
                 <th class="col-md-2" style="text-align: center; margin: 0 auto;"></th>
                 <th class="col-md-2" style="text-align: center; margin: 0 auto;"></th>
             </tr>
@@ -83,10 +83,7 @@
 
             <tbody>
                 <tr th:each="store : ${stores}">
-                    <td class="col-md-1" style="text-align: center; margin: 0 auto;"
-                        th:text="${store.id}"></td>
-
-                    <td class="col-md-3" style="text-align: center; margin: 0 auto;"
+                    <td class="col-md-2" style="text-align: center; margin: 0 auto;"
                         th:text="${store.name}"></td>
                     </td>
 
@@ -99,8 +96,14 @@
                         th:text="${#temporals.format(store.createdDate, 'yyyy-MM-dd')}"></td>
 
                     <td class="col-md-2">
-                        <a th:href="@{/seats/{storeId}/upload(storeId=${store.id})}" class="flex-grow-1 mx-1">
+                        <a th:href="@{/seats/{storeId}/setting(storeId=${store.id})}" class="flex-grow-1 mx-1">
                             <button type="button" class="btn btn-primary w-100">좌석 배치</button>
+                        </a>
+                    </td>
+
+                    <td class="col-md-2">
+                        <a th:href="@{/seats/{storeId}/state(storeId=${store.id})}" class="flex-grow-1 mx-1">
+                            <button type="button" class="btn btn-primary w-100">좌석 현황</button>
                         </a>
                     </td>
 

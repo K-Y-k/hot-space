@@ -18,6 +18,11 @@ public class SpringDataJpaSeatRepository implements SeatRepository{
     }
 
     @Override
+    public Optional<Seat> findById(Long id) {
+        return JPASeatRepository.findById(id);
+    }
+
+    @Override
     public Optional<Seat> findFirstByStoreId(Long storeId) {
         return JPASeatRepository.findFirstByStoreId(storeId);
     }

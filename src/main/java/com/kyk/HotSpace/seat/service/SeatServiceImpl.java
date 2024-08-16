@@ -48,6 +48,15 @@ public class SeatServiceImpl implements SeatService {
     }
 
     @Override
+    public SeatDTO changeAvailable(Long seatId) {
+        Seat findSeat = seatRepository.findById(seatId).get();
+
+        findSeat.changeAvailable();
+
+        return new SeatDTO(findSeat.getId(), findSeat.getSeatType(), findSeat.getPosX(), findSeat.getPosY(), findSeat.isAvailable(), findSeat.getTableCapacity());
+    }
+
+    @Override
     public List<Seat> findSeatsByStoreId(Long storeId) {
         return seatRepository.findByStoreId(storeId);
     }

@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 @RequestMapping("/seats")
 public class SeatController {
 
-    @GetMapping("/{storeId}/upload")
-    public String seatsFrom(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDto loginMember,
+    @GetMapping("/{storeId}/setting")
+    public String seatsForm(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDto loginMember,
                             @PathVariable Long storeId,
                             Model model) {
         // 세션 회원 검증
@@ -32,6 +32,25 @@ public class SeatController {
 
         model.addAttribute("storeId", storeId);
 
-        return "seats/seat_upload";
+        return "seats/seat_setting";
+    }
+
+
+    @GetMapping("/{storeId}/state")
+    public String seatsStateForm(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDto loginMember,
+                                 @PathVariable Long storeId,
+                                 Model model) {
+        // 세션 회원 검증
+        if (loginMember == null) {
+            log.info("로그인 상태가 아님");
+
+            model.addAttribute("message", "회원만 이용할 수 있습니다. 로그인 먼저 해주세요!");
+            model.addAttribute("redirectUrl", "/members/login");
+            return "messages";
+        }
+
+        model.addAttribute("storeId", storeId);
+
+        return "seats/seat_state";
     }
 }

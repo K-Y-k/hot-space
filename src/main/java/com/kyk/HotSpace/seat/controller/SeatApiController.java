@@ -43,7 +43,7 @@ public class SeatApiController {
         List<Seat> seats = seatService.findSeatsByStoreId(storeId);
 
         List<SeatDTO> seatDTOs = seats.stream()
-                .map(seat -> new SeatDTO(seat.getSeatType(), seat.getPosX(), seat.getPosY(), seat.getTableCapacity()))
+                .map(seat -> new SeatDTO(seat.getId(), seat.getSeatType(), seat.getPosX(), seat.getPosY(), seat.isAvailable(), seat.getTableCapacity()))
                 .collect(Collectors.toList());
 
         for (SeatDTO seatDTO : seatDTOs) {
@@ -51,10 +51,18 @@ public class SeatApiController {
             log.info("= {}", seatDTO.getTableCapacity());
             log.info("= {}", seatDTO.getPosX());
             log.info("= {}", seatDTO.getPosY());
-
-            seatService.saveSeat(seatDTO, storeId);
         }
 
         return ResponseEntity.ok(seatDTOs);
+    }
+
+
+    @PostMapping("/api/update/available/{seatId}")
+    public ResponseEntity<?> updateAvailable(@PathVariable Long seatId) {
+        log.info("선택한 좌석 Id ={}", seatId);
+
+        SeatDTO seatDTO = seatService.changeAvailable(seatId);
+
+        return ResponseEntity.ok(seatDTO);
     }
 }

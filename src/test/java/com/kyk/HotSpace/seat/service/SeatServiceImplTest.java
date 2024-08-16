@@ -55,6 +55,20 @@ public class SeatServiceImplTest {
     }
 
     @Test
+    @DisplayName("등록한 가게에 좌석들 중 좌석 id로 찾기")
+    void findById() {
+        // given
+        Seat seat1 = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+        Seat savedSeat = seatRepository.saveSeat(seat1);
+
+        // when
+        Seat findSeat = seatRepository.findById(savedSeat.getId()).get();
+
+        // then
+        assertThat(findSeat.getId()).isEqualTo(savedSeat.getId());
+    }
+
+    @Test
     @DisplayName("등록한 가게에 좌석들의 첫번째 데이터 찾기")
     void findFirstSeatByStoreId() {
         // given

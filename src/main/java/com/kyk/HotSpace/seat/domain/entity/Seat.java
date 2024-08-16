@@ -35,4 +35,10 @@ public class Seat extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
+
+
+    // 변경감지 메서드
+    public void changeAvailable() {
+        available = !available;
+    }
 }
