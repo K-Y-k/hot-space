@@ -13,6 +13,27 @@
 
 <body>
   <main>
+    <div class="seat-statistics">
+        <div class="statistics-element">
+          <h4>총 테이블: </h4>
+          <h4 style="font-weight: bold;" th:text="${totalCount}"></h4>
+        </div>
+
+        <div class="statistics-element">
+          <h4>사용 테이블: </h4>
+
+          <div class="seat small noAvailable"></div>
+          <h4 th:text="${usingCount}" style="font-weight: bold;" id="usingCount"></h4>
+        </div>
+
+        <div class="statistics-element">
+          <h4>잔여 테이블: </h4>
+
+          <div class="seat small"></div>
+          <h4 th:text="${remainingCount}" style="font-weight: bold;" id="remainingCount"></h4>
+        </div>
+    </div>
+
     <div class="seat-container-background">
       <h4>테이블 현황</h4>
       <div class="seat-container">

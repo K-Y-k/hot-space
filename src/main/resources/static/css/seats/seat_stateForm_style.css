@@ -4,11 +4,21 @@ main {
     width: 1800px;
     height: 900px;
 }
-
-.seat-container-background {
-    position: relative;
+.seat-statistics {
+    position: absolute;
     top: 150px;
-    left: 450px;
+    left: 80px;
+    width: 200px;
+    text-align: center;
+}
+.statistics-element {
+    display: flex;
+    gap: 10px;
+}
+.seat-container-background {
+    position: absolute;
+    top: 150px;
+    left: 500px;
     text-align: center;
 }
 .seat-container {

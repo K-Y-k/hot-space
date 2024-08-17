@@ -11,6 +11,6 @@ public interface SeatRepository {
     Optional<Seat> findFirstByStoreId(Long storeId);
     List<Seat> findByStoreId(Long storeId);
     void deleteAllByStoreId(Long storeId);
-
+    int countByAvailableFalse();
     void clear();
 }

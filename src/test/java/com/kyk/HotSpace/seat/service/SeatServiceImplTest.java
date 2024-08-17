@@ -119,4 +119,25 @@ public class SeatServiceImplTest {
         List<Seat> seatListAfterDeletion = seatRepository.findByStoreId(savedStore.getId());
         assertThat(seatListAfterDeletion).isEmpty();
     }
+
+    @Test
+    @DisplayName("등록한 가게에 좌석들의 모든 데이터 찾기")
+    void statistics() {
+        // given
+        for (int i = 0; i < 7; i++) {
+            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+            seatRepository.saveSeat(newSeat);
+        }
+
+        for (int i = 0; i < 3; i++) {
+            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, false, savedStore);
+            seatRepository.saveSeat(newSeat);
+        }
+
+        // when
+        int noAvailableCount = seatRepository.countByAvailableFalse();
+
+        // then
+        assertThat(noAvailableCount).isEqualTo(3);
+    }
 }

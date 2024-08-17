@@ -1,6 +1,7 @@
 package com.kyk.HotSpace.seat.service;
 
 import com.kyk.HotSpace.seat.domain.dto.SeatDTO;
+import com.kyk.HotSpace.seat.domain.dto.SeatStatistics;
 import com.kyk.HotSpace.seat.domain.entity.Seat;
 import com.kyk.HotSpace.seat.repository.SeatRepository;
 import com.kyk.HotSpace.store.domain.entity.Store;
@@ -70,4 +71,14 @@ public class SeatServiceImpl implements SeatService {
         }
     }
 
+    @Override
+    public SeatStatistics statisticsResult(Long storeId) {
+        List<Seat> seats = seatRepository.findByStoreId(storeId);
+
+        int totalCount = seats.size();
+        int usingCount = seatRepository.countByAvailableFalse();
+        int remainingCount = totalCount - usingCount;
+
+        return new SeatStatistics(totalCount, usingCount, remainingCount);
+    }
 }

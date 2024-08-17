@@ -2,6 +2,9 @@ package com.kyk.HotSpace.seat.controller;
 
 import com.kyk.HotSpace.member.domain.LoginSessionConst;
 import com.kyk.HotSpace.member.domain.dto.MemberDto;
+import com.kyk.HotSpace.seat.domain.dto.SeatStatistics;
+import com.kyk.HotSpace.seat.domain.entity.Seat;
+import com.kyk.HotSpace.seat.service.SeatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 @RequiredArgsConstructor
 @RequestMapping("/seats")
 public class SeatController {
+    private final SeatService seatService;
 
     @GetMapping("/{storeId}/setting")
     public String seatsForm(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDto loginMember,
@@ -35,7 +39,6 @@ public class SeatController {
         return "seats/seat_setting";
     }
 
-
     @GetMapping("/{storeId}/state")
     public String seatsStateForm(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDto loginMember,
                                  @PathVariable Long storeId,
@@ -49,6 +52,11 @@ public class SeatController {
             return "messages";
         }
 
+        SeatStatistics seatStatistics = seatService.statisticsResult(storeId);
+
+        model.addAttribute("totalCount", seatStatistics.getTotalCount());
+        model.addAttribute("usingCount", seatStatistics.getUsingCount());
+        model.addAttribute("remainingCount", seatStatistics.getRemainingCount());
         model.addAttribute("storeId", storeId);
 
         return "seats/seat_state";

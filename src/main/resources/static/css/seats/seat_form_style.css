@@ -4,7 +4,12 @@ main {
     width: 1800px;
     height: 900px;
 }
-
+.guide {
+    position: relative;
+    top: 150px;
+    width: 450px;
+    text-align: center;
+}
 .seat-container-background {
     position: relative;
     top: 150px;

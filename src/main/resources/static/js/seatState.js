@@ -1,3 +1,6 @@
+var usingCountElement = document.getElementById('usingCount');
+var remainingCountElement = document.getElementById('remainingCount');
+
 // 저장된 좌석 보여주기
 $(document).ready(function() {
     $.ajax({
@@ -77,10 +80,19 @@ function updateSeatAvailable(seatId) {
                 console.log('좌석을 찾을 수 없습니다.');
             }
 
-            // 좌석이용가능여부 변경 사항에 따른 css 적용
+            // 좌석이용가능여부 변경 사항에 따른 css 적용 및 현황 개수 업데이트
+            var currentUsingCount = parseInt(usingCountElement.textContent, 10);
+            var currentRemainingCount = parseInt(remainingCountElement.textContent, 10);
+
             if (!updateResult.available) {
+                usingCountElement.textContent = currentUsingCount + 1;
+                remainingCountElement.textContent = currentRemainingCount - 1;
+
                 seatElement.style.backgroundColor = 'red';
             } else {
+                usingCountElement.textContent = currentUsingCount - 1;
+                remainingCountElement.textContent = currentRemainingCount + 1;
+
                 seatElement.style.backgroundColor = 'white';
             }
         },

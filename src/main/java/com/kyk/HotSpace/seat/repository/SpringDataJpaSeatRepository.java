@@ -38,6 +38,11 @@ public class SpringDataJpaSeatRepository implements SeatRepository{
     }
 
     @Override
+    public int countByAvailableFalse() {
+        return JPASeatRepository.countByAvailableFalse();
+    }
+
+    @Override
     public void clear() {
         JPASeatRepository.deleteAll();
     }
