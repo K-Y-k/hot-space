@@ -1,0 +1,87 @@
+main {
+    display: flex;
+    position: relative;
+    width: 1800px;
+    height: 900px;
+}
+.guide {
+    position: relative;
+    top: 150px;
+    width: 450px;
+    text-align: center;
+}
+.seat-container-background {
+    position: relative;
+    top: 150px;
+    left: 150px;
+    text-align: center;
+}
+.seat-container {
+    width: 700px;
+    height: 500px;
+    border: 1px solid #ccc;
+}
+
+.sample-seat-container-background {
+     position: absolute;
+     top: 150px;
+     left: 1350px;
+     text-align: center;
+}
+.sample-seat-container {
+    width: 300px;
+    height: 200px;
+    border: 1px solid #ccc;
+}
+.sample-line {
+    display: flex;
+    margin: 10px;
+    gap: 50px;
+    justify-content: center;
+}
+
+.seat {
+    background-color: lightblue;
+    border: 1px solid #000;
+    text-align: center;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+}
+/* 좌석 크기별 스타일 */
+.seat.small {
+    width: 25px;
+    height: 25px;
+    line-height: 15px; /* 텍스트가 좌석의 가운데에 위치하도록 조정 */
+    font-size: 15px;
+}
+.seat.medium {
+    width: 45px;
+    height: 45px;
+    line-height: 35px;
+    font-size: 25px;
+}
+.seat.large {
+    width: 130px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 35px;
+}
+
+.button-box {
+    position: absolute;
+    top: 700px;
+    left: 900px;
+
+    display: flex;
+    justify-content: between;
+}
+
+
+.field-error {
+    border: 1px solid red;
+}
+.error-sign {
+    color: red;
+    font-size: 0.8rem;
+}

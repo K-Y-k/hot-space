@@ -1,16 +1,18 @@
 package com.kyk.HotSpace.store.service;
 
-import com.kyk.HotSpace.store.domain.dto.StoreDTO;
 import com.kyk.HotSpace.store.domain.dto.StoreUploadForm;
 import com.kyk.HotSpace.store.domain.dto.StoreUpdateForm;
 import com.kyk.HotSpace.store.domain.entity.Store;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 public interface StoreService {
     Optional<Store> findById(Long id);
-    Long saveStore(Long memberId, StoreUploadForm form);
+    Long saveStore(Long memberId, StoreUploadForm form) throws IOException;
 
     void changeStore(Long memberId, StoreUpdateForm form);
 
@@ -19,4 +21,5 @@ public interface StoreService {
     List<Store> findMarkersWithinRadius(double lat, double lng, double radius);
 
     List<Store> findMarkersWithinRadiusByCategory(double center_lat, double center_lng, double radiusIn, String category);
+    Page<Store> findStoresByMemberId(Long memberId, Pageable pageable);
 }

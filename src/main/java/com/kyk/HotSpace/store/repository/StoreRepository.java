@@ -1,7 +1,8 @@
 package com.kyk.HotSpace.store.repository;
 
-import com.kyk.HotSpace.store.domain.dto.StoreDTO;
 import com.kyk.HotSpace.store.domain.entity.Store;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,4 +18,6 @@ public interface StoreRepository {
 
     List<Store> findStoreWithinRadius(double lat, double lng, double radius);
     List<Store> findStoreWithinRadiusByCategory(double lat, double lng, double radius, String category);
+
+    Page<Store> findStoresByMemberId(Long memberId, Pageable pageable);
 }
