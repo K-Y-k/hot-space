@@ -52,6 +52,7 @@ public class SeatController {
             return "messages";
         }
 
+        // 테이블 현황 통계 내역 가져오기
         SeatStatistics seatStatistics = seatService.statisticsResult(storeId);
 
         model.addAttribute("totalCount", seatStatistics.getTotalCount());
@@ -61,4 +62,19 @@ public class SeatController {
 
         return "seats/seat_state";
     }
+
+    @GetMapping("/{storeId}/state/view")
+    public String seatsView(@PathVariable Long storeId,
+                            Model model) {
+
+        SeatStatistics seatStatistics = seatService.statisticsResult(storeId);
+
+        model.addAttribute("totalCount", seatStatistics.getTotalCount());
+        model.addAttribute("usingCount", seatStatistics.getUsingCount());
+        model.addAttribute("remainingCount", seatStatistics.getRemainingCount());
+        model.addAttribute("storeId", storeId);
+
+        return "seats/seat_state_view";
+    }
+
 }
