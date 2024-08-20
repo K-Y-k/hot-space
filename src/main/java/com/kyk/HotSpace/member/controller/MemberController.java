@@ -3,7 +3,8 @@ package com.kyk.HotSpace.member.controller;
 import com.kyk.HotSpace.member.domain.LoginSessionConst;
 import com.kyk.HotSpace.member.domain.dto.JoinForm;
 import com.kyk.HotSpace.member.domain.dto.LoginForm;
-import com.kyk.HotSpace.member.domain.dto.MemberDto;
+import com.kyk.HotSpace.member.domain.dto.MemberDTO;
+import com.kyk.HotSpace.member.domain.dto.UpdateForm;
 import com.kyk.HotSpace.member.service.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class MemberController {
 
 
     /**
-     *  회원 등록 폼
+     * 회원 등록 폼
      */
     @GetMapping("/join")
     public String memberRegisterForm(@ModelAttribute("joinForm") JoinForm form) { // 컨트롤러에서 뷰로 넘어갈 때 이 데이터를 넣어 보낸다.
@@ -34,7 +35,7 @@ public class MemberController {
     }
 
     /**
-     *  회원 저장 기능
+     * 회원 저장 기능
      */
     @PostMapping("/join")
     public String save(@Valid @ModelAttribute("joinForm") JoinForm form,
@@ -77,7 +78,7 @@ public class MemberController {
 
 
         // 성공시 로그인 기능 적용후 멤버에 저장 틀릴시 예외처리
-        MemberDto loginMember = memberService.login(loginForm.getLoginId(), loginForm.getPassword()); // 폼에 입력한 아이디 패스워드 가져와서 멤버로 저장
+        MemberDTO loginMember = memberService.login(loginForm.getLoginId(), loginForm.getPassword()); // 폼에 입력한 아이디 패스워드 가져와서 멤버로 저장
         log.info("login? {}", loginMember);
 
 
@@ -105,6 +106,51 @@ public class MemberController {
             session.invalidate(); // 해당 세션이랑 그 안의 데이터를 모두 지운다.
             log.info("로그아웃 완료");
         }
+
+        return "redirect:/";
+    }
+
+
+    /**
+     * 회원 수정 폼
+     */
+    @GetMapping("/{memberId}/update")
+    public String memberUpdateForm(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDTO loginMember,
+                                   @ModelAttribute("updateForm") UpdateForm form,
+                                   @PathVariable Long memberId,
+                                   Model model) {
+        // 세션 회원 검증
+        if (loginMember == null) {
+            model.addAttribute("message", "회원만 이용할 수 있습니다. 로그인 먼저 해주세요!");
+            model.addAttribute("redirectUrl", "/members/login");
+            return "messages";
+        }
+
+        // 본인 프로필인지 검증
+        if (loginMember.getId() != memberId) {
+            model.addAttribute("message", "본인 프로필이 아닙니다.");
+            model.addAttribute("redirectUrl", "/");
+            return "messages";
+        }
+
+        return "members/member_update";
+    }
+
+    /**
+     * 회원 수정 기능
+     */
+    @PostMapping("/{memberId}/update")
+    public String memberUpdate(@Valid @ModelAttribute("updateForm") UpdateForm form,
+                               BindingResult bindingResult,
+                               @PathVariable Long memberId) {
+        if (bindingResult.hasErrors()) {
+            return "members/member_update";
+        }
+
+        log.info("받아온 이름 = {}", form.getName());
+        log.info("받아온 비밀번호 = {}", form.getPassword());
+
+        memberService.changeProfile(memberId, form);
 
         return "redirect:/";
     }

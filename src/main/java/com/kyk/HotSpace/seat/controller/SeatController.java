@@ -1,9 +1,8 @@
 package com.kyk.HotSpace.seat.controller;
 
 import com.kyk.HotSpace.member.domain.LoginSessionConst;
-import com.kyk.HotSpace.member.domain.dto.MemberDto;
+import com.kyk.HotSpace.member.domain.dto.MemberDTO;
 import com.kyk.HotSpace.seat.domain.dto.SeatStatistics;
-import com.kyk.HotSpace.seat.domain.entity.Seat;
 import com.kyk.HotSpace.seat.service.SeatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,7 @@ public class SeatController {
     private final SeatService seatService;
 
     @GetMapping("/{storeId}/setting")
-    public String seatsForm(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDto loginMember,
+    public String seatsForm(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDTO loginMember,
                             @PathVariable Long storeId,
                             Model model) {
         // 세션 회원 검증
@@ -40,7 +39,7 @@ public class SeatController {
     }
 
     @GetMapping("/{storeId}/state")
-    public String seatsStateForm(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDto loginMember,
+    public String seatsStateForm(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDTO loginMember,
                                  @PathVariable Long storeId,
                                  Model model) {
         // 세션 회원 검증

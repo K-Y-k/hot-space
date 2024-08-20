@@ -5,7 +5,7 @@ import com.kyk.HotSpace.exception.member.MemberNotFoundException;
 import com.kyk.HotSpace.file.domain.ProfileFile;
 import com.kyk.HotSpace.file.repository.member.ProfileFileRepository;
 import com.kyk.HotSpace.member.domain.dto.JoinForm;
-import com.kyk.HotSpace.member.domain.dto.MemberDto;
+import com.kyk.HotSpace.member.domain.dto.MemberDTO;
 import com.kyk.HotSpace.member.domain.dto.UpdateForm;
 import com.kyk.HotSpace.member.domain.entity.Member;
 import com.kyk.HotSpace.member.repository.MemberRepository;
@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Slf4j
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
@@ -91,24 +93,31 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public MemberDto login(String loginId, String password) {
+    public MemberDTO login(String loginId, String password) {
         // 람다를 활용하여 축약
         Member loginMember = memberRepository.findByLoginId(loginId)
                 .filter(m -> m.getPassword().equals(password))
                 .orElseThrow(() -> new MemberNotFoundException("아이디 또는 패스워드가 일치하지 않습니다."));
 
-        log.info("로그인 중 프로필 사진 = {}", loginMember.getProfileFile().getStoredFileName());
+        String storedFileName = (loginMember.getProfileFile() != null)
+                ? loginMember.getProfileFile().getStoredFileName()
+                : "defaultFile"; // 기본값 설정
 
-        return new MemberDto(loginMember.getId(), loginMember.getName(), loginMember.getRole(), loginMember.getProfileFile().getStoredFileName());
+        return new MemberDTO(loginMember.getId(), loginMember.getName(), loginMember.getRole(), storedFileName);
     }
 
 
     @Override
-    public MemberDto findMemberDtoById(Long memberId) {
+    public MemberDTO findMemberDtoById(Long memberId) {
         Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("회원 찾기 실패: 회원을 찾을 수 없습니다." + memberId));
 
-        return new MemberDto(findMember.getId(), findMember.getName(),  findMember.getRole(), findMember.getProfileFile().getStoredFileName());
+        String storedFileName = "defaultFileName";
+        if (findMember.getProfileFile() != null) {
+            storedFileName = findMember.getProfileFile().getStoredFileName();
+        }
+
+        return new MemberDTO(findMember.getId(), findMember.getName(),  findMember.getRole(), storedFileName);
     }
 
 
@@ -117,7 +126,18 @@ public class MemberServiceImpl implements MemberService {
         Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("회원 찾기 실패: 회원을 찾을 수 없습니다." + memberId));
 
-        findMember.changeProfile(form.getName(), form.getLoginId(), form.getPassword());
+        if (form.getName() != null) {
+            log.info("받아온 이름={}", form.getName());
+            findMember.changeName(form.getName());
+        }
+
+        if (form.getPassword() != null) {
+            log.info("받아온 비밀번호={}", form.getPassword());
+            findMember.changePassword(form.getPassword());
+        }
+
+
+        log.info("업데이트 완료");
     }
 
 

@@ -1,8 +1,7 @@
 package com.kyk.HotSpace.web;
 
 import com.kyk.HotSpace.member.domain.LoginSessionConst;
-import com.kyk.HotSpace.member.domain.dto.MemberDto;
-import com.kyk.HotSpace.member.domain.entity.Member;
+import com.kyk.HotSpace.member.domain.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 public class HomeController {
 
     @GetMapping("/")
-    public String home(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDto loginMember,
+    public String home(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDTO loginMember,
                        Model model) {
         log.info("회원 세션 유무 = {}", loginMember);
 

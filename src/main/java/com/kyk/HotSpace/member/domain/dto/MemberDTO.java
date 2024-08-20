@@ -10,7 +10,7 @@ import lombok.Setter;
  */
 @Getter @Setter
 @AllArgsConstructor
-public class MemberDto {
+public class MemberDTO {
     private Long id;
     private String name;
     private Role role;

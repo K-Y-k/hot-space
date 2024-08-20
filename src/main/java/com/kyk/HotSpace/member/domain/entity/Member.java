@@ -48,9 +48,10 @@ public class Member extends BaseTimeEntity {
 
     // 비즈니스 로직
     // 변경 감지로 프로필 업데이트
-    public void changeProfile(String name, String loginId, String password){
+    public void changeName(String name){
         this.name = name;
-        this.loginId = loginId;
+    }
+    public void changePassword(String password){
         this.password = password;
     }
 
