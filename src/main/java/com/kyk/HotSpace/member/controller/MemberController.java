@@ -115,7 +115,7 @@ public class MemberController {
      * 회원 수정 폼
      */
     @GetMapping("/{memberId}/update")
-    public String memberUpdateForm(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDTO loginMember,
+    public String memberUpdateForm(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER) MemberDTO loginMember,
                                    @ModelAttribute("updateForm") UpdateForm form,
                                    @PathVariable Long memberId,
                                    Model model) {
@@ -133,6 +133,12 @@ public class MemberController {
             return "messages";
         }
 
+        form.setName(loginMember.getName());
+        form.setPassword(memberService.findMemberDtoById(memberId).getPassword());
+
+        log.info("기존 이름 = {}", form.getName());
+        log.info("기존 비밀번호 = {}", form.getPassword());
+
         return "members/member_update";
     }
 
@@ -140,9 +146,11 @@ public class MemberController {
      * 회원 수정 기능
      */
     @PostMapping("/{memberId}/update")
-    public String memberUpdate(@Valid @ModelAttribute("updateForm") UpdateForm form,
+    public String memberUpdate(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER) MemberDTO loginMember,
+                               @Valid @ModelAttribute("updateForm") UpdateForm form,
                                BindingResult bindingResult,
-                               @PathVariable Long memberId) {
+                               @PathVariable Long memberId, Model model,
+                               HttpServletRequest request) throws IOException {
         if (bindingResult.hasErrors()) {
             return "members/member_update";
         }
@@ -150,9 +158,22 @@ public class MemberController {
         log.info("받아온 이름 = {}", form.getName());
         log.info("받아온 비밀번호 = {}", form.getPassword());
 
-        memberService.changeProfile(memberId, form);
+        memberService.changeProfile(loginMember, form);
 
-        return "redirect:/";
+        // 프로필 사진 갱신을 위해 로그아웃
+        HttpSession session = request.getSession(false);
+        if (session != null) { 
+            session.invalidate();
+            log.info("로그아웃 완료");
+        }
+        
+        // 다시 로그인 처리
+        HttpSession newSession = request.getSession();
+        newSession.setAttribute(LoginSessionConst.LOGIN_MEMBER, loginMember);
+
+        model.addAttribute("message", "수정 되었습니다!");
+        model.addAttribute("redirectUrl", "/members/" + memberId + "/update");
+        return "messages";
     }
 
 }

@@ -5,6 +5,7 @@ import com.kyk.HotSpace.exception.member.MemberNotFoundException;
 import com.kyk.HotSpace.file.domain.ProfileFile;
 import com.kyk.HotSpace.file.repository.member.ProfileFileRepository;
 import com.kyk.HotSpace.member.domain.dto.JoinForm;
+import com.kyk.HotSpace.member.domain.dto.MemberAllDTO;
 import com.kyk.HotSpace.member.domain.dto.MemberDTO;
 import com.kyk.HotSpace.member.domain.dto.UpdateForm;
 import com.kyk.HotSpace.member.domain.entity.Member;
@@ -18,6 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -108,7 +114,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public MemberDTO findMemberDtoById(Long memberId) {
+    public MemberAllDTO findMemberDtoById(Long memberId) {
         Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("회원 찾기 실패: 회원을 찾을 수 없습니다." + memberId));
 
@@ -117,27 +123,55 @@ public class MemberServiceImpl implements MemberService {
             storedFileName = findMember.getProfileFile().getStoredFileName();
         }
 
-        return new MemberDTO(findMember.getId(), findMember.getName(),  findMember.getRole(), storedFileName);
+        return new MemberAllDTO(findMember.getId(), findMember.getName(), findMember.getLoginId(), findMember.getPassword(), findMember.getRole(), storedFileName);
     }
 
 
     @Override
-    public void changeProfile(Long memberId, UpdateForm form) {
-        Member findMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("회원 찾기 실패: 회원을 찾을 수 없습니다." + memberId));
+    public void changeProfile(MemberDTO loginMember, UpdateForm form) throws IOException {
+        Member findMember = memberRepository.findById(loginMember.getId())
+                .orElseThrow(() -> new IllegalArgumentException("회원 찾기 실패: 회원을 찾을 수 없습니다." + loginMember.getId()));
 
+        // 이름 수정
         if (form.getName() != null) {
             log.info("받아온 이름={}", form.getName());
             findMember.changeName(form.getName());
         }
 
+        // 비밀번호 수정
         if (form.getPassword() != null) {
             log.info("받아온 비밀번호={}", form.getPassword());
             findMember.changePassword(form.getPassword());
         }
 
+        // 프로필 사진 수정
+        if (!form.getProfileImage().isEmpty()) {
+            // 실제 파일 삭제
+            deleteProfileLocalFile(findMember);
+
+            // DB 파일 삭제
+            profileFileRepository.deleteByMemberId(findMember.getId());
+            
+            // 새로 받은 사진으로 실제 파일 + DB 파일 생성
+            uploadProfileFile(form.getProfileImage(), findMember);
+
+            // 로그인한 프로필 사진명 재설정
+            ProfileFile findProfileFile = profileFileRepository.findByMemberId(findMember.getId()).get();
+            loginMember.setStoredFileName(findProfileFile.getStoredFileName());
+        }
 
         log.info("업데이트 완료");
+    }
+
+    private void deleteProfileLocalFile(Member findMember) {
+        Path beforeAttachPath = Paths.get(profileLocation+"\\" + findMember.getProfileFile().getStoredFileName());
+        try {
+            Files.deleteIfExists(beforeAttachPath);
+        } catch (DirectoryNotEmptyException e) {
+            log.info("디렉토리가 비어있지 않습니다");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

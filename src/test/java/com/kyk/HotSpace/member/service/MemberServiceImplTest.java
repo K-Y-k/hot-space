@@ -1,5 +1,6 @@
 package com.kyk.HotSpace.member.service;
 
+import com.kyk.HotSpace.member.domain.dto.MemberAllDTO;
 import com.kyk.HotSpace.member.domain.dto.MemberDTO;
 import com.kyk.HotSpace.member.domain.dto.UpdateForm;
 import com.kyk.HotSpace.member.domain.entity.Member;
@@ -37,7 +38,7 @@ public class MemberServiceImplTest {
 
         // when
         Member savedMember = memberRepository.saveMember(member);
-        MemberDTO findMember = memberService.findMemberDtoById(member.getId());
+        MemberAllDTO findMember = memberService.findMemberDtoById(member.getId());
 
         // then
         assertThat(findMember.getId()).isEqualTo(savedMember.getId());
@@ -73,7 +74,7 @@ public class MemberServiceImplTest {
 
     @Test
     @DisplayName("회원 정보 수정")
-    void update() {
+    void update() throws IOException {
         // given
         Member member = new Member("memberA", "ID123", "pass123", Role.CUSTOMER);
         Member savedMember = memberRepository.saveMember(member);
@@ -81,11 +82,12 @@ public class MemberServiceImplTest {
         UpdateForm updateForm = new UpdateForm("수정된 이름", "수정된 비밀번호");
 
         // when
-        memberService.changeProfile(savedMember.getId(), updateForm);
+        savedMember.changeName(updateForm.getName());
+        savedMember.changePassword(updateForm.getPassword());
 
         // then
-        MemberDTO fineMember = memberService.findMemberDtoById(savedMember.getId());
-        assertThat(fineMember.getName()).isEqualTo(updateForm.getName());
+        assertThat(savedMember.getName()).isEqualTo(updateForm.getName());
+        assertThat(savedMember.getPassword()).isEqualTo(updateForm.getPassword());
     }
 
 

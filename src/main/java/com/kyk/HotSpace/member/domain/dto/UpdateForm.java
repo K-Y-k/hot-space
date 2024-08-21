@@ -11,8 +11,8 @@ import javax.validation.constraints.Size;
 /**
  * 회원 수정시 사용될 DTO
  */
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class UpdateForm {
     @Size(min = 2, max = 7, message = "최소 2글자, 최대 7글자입니다.")
     private String name;

@@ -1,6 +1,7 @@
 package com.kyk.HotSpace.member.service;
 
 import com.kyk.HotSpace.member.domain.dto.JoinForm;
+import com.kyk.HotSpace.member.domain.dto.MemberAllDTO;
 import com.kyk.HotSpace.member.domain.dto.MemberDTO;
 import com.kyk.HotSpace.member.domain.dto.UpdateForm;
 
@@ -11,9 +12,9 @@ public interface MemberService {
 
     MemberDTO login(String loginId, String password);
 
-    MemberDTO findMemberDtoById(Long memberId);
+    MemberAllDTO findMemberDtoById(Long memberId);
 
-    void changeProfile(Long memberId, UpdateForm form);
+    void changeProfile(MemberDTO loginMember, UpdateForm form) throws IOException;
 
     void delete(Long memberId);
 }
