@@ -147,7 +147,7 @@ public class MemberServiceImpl implements MemberService {
         // 프로필 사진 수정
         if (!form.getProfileImage().isEmpty()) {
             // 실제 파일 삭제
-            deleteProfileLocalFile(findMember);
+            deleteProfileLocalFile(findMember.getProfileFile().getStoredFileName());
 
             // DB 파일 삭제
             profileFileRepository.deleteByMemberId(findMember.getId());
@@ -163,8 +163,8 @@ public class MemberServiceImpl implements MemberService {
         log.info("업데이트 완료");
     }
 
-    private void deleteProfileLocalFile(Member findMember) {
-        Path beforeAttachPath = Paths.get(profileLocation+"\\" + findMember.getProfileFile().getStoredFileName());
+    private void deleteProfileLocalFile(String storedFileName) {
+        Path beforeAttachPath = Paths.get(profileLocation+"\\" + storedFileName);
         try {
             Files.deleteIfExists(beforeAttachPath);
         } catch (DirectoryNotEmptyException e) {
@@ -177,6 +177,14 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void delete(Long memberId) {
+        // 프로필 파일, 엔티티 삭제
+        Optional<ProfileFile> findProfileFile = profileFileRepository.findByMemberId(memberId);
+        if (findProfileFile.isPresent()) {
+            deleteProfileLocalFile(findProfileFile.get().getStoredFileName());
+            profileFileRepository.deleteByMemberId(memberId);
+        }
+
+        // 회원 엔티티 삭제
         memberRepository.delete(memberId);
     }
 }

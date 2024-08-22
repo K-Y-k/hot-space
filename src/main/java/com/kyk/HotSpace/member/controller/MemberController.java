@@ -176,4 +176,24 @@ public class MemberController {
         return "messages";
     }
 
+    /**
+     * 회원 탈퇴 기능
+     */
+    @GetMapping("/{memberId}/delete")
+    public String memberDelete(HttpServletRequest request,
+                               @PathVariable Long memberId, Model model) {
+        // 회원, 프로필 DB/파일 삭제
+        memberService.delete(memberId);
+
+        // 로그아웃 처리
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+            log.info("로그아웃 완료");
+        }
+
+        model.addAttribute("message", "회원탈퇴 되었습니다!");
+        model.addAttribute("redirectUrl", "/");
+        return "messages";
+    }
 }
