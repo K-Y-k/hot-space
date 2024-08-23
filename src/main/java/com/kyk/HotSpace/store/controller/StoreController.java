@@ -17,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Objects;
@@ -130,6 +132,15 @@ public class StoreController {
         return "messages";
     }
 
+    @GetMapping("/{storeId}/delete")
+    public String storeDelete(@PathVariable Long storeId, Model model) {
+        // 가게, 가게 이미지 DB/파일 삭제
+        storeService.deleteStore(storeId);
+
+        model.addAttribute("message", "삭제 되었습니다!");
+        model.addAttribute("redirectUrl", "/stores/storeList");
+        return "messages";
+    }
 
 
     @GetMapping("/storeList")
