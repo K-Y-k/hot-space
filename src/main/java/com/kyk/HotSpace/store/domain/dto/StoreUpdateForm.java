@@ -19,7 +19,6 @@ public class StoreUpdateForm {
     @NotBlank(message = "가게 이름을 입력해주세요")
     private String name;
 
-    @NotBlank(message = "주소를 입력해주세요")
     private String address;
 
     @NotBlank(message = "연락처를 입력해주세요(- 포함)")
@@ -28,9 +27,7 @@ public class StoreUpdateForm {
 
     private String siteUrl;
 
-    @NotZero(message = "지도에 가게의 위치를 찍어주세요")
     private double latitude;
-
     private double longitude;
 
     private List<MultipartFile> imageFiles;

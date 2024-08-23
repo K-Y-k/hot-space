@@ -100,6 +100,8 @@ public class StoreController {
         log.info("원본 가게 경도 = {}", form.getLongitude());
         log.info("원본 가게 url = {}", form.getSiteUrl());
 
+        model.addAttribute("storeId", storeId);
+
         return "stores/store_update";
     }
 
@@ -118,7 +120,7 @@ public class StoreController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "stores/store_upload";
+            return "stores/store_update";
         }
 
         storeService.changeStore(storeId, form);
