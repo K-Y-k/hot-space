@@ -31,6 +31,13 @@
         </a>
       </li>
 
+      <li class="nav-item">
+        <a th:href="@{/stores/upload}" class="nav-link text-white">
+          <img src="/img/main/store_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
+          가게 등록
+        </a>
+      </li>
+
       <li class="nav-item"
           th:if="${session.loginMember != null}">
         <a th:href="@{/stores/storeList}" class="nav-link text-white">
@@ -91,11 +98,11 @@
         <div class="col-md-6">
           <div class="card">
             <div class="card-header text-center">
-              <h4>가게 등록</h4>
+              <h4>가게 수정</h4>
             </div>
 
             <div class="card-body">
-              <form action="" th:action th:object="${uploadForm}" method="post" enctype="multipart/form-data">
+              <form action="" th:action th:object="${updateForm}" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                   <select th:field="*{category}" class="form-select" th:errorclass="field-error">
                     <option value="">시설 종류 선택</option>
@@ -137,7 +144,7 @@
                 <div class="error-sign" th:errors="*{latitude}"></div>
 
                 <div>
-                  <button class="w-100 btn btn-primary" id="register-btn" type="submit">등록</button>
+                  <button class="w-100 btn btn-primary" id="register-btn" type="submit">수정</button>
                   <button class="w-100 btn btn-secondary"
                           th:onclick="|location.href='@{/}'|"
                           type="button">취소
@@ -165,7 +172,7 @@
         crossorigin="anonymous">
 </script>
 
-<script src="/js/storeUpload.js"></script>
+<script src="/js/storeUpdate.js"></script>
 <script src="/js/address.js"></script>
 
 </html>

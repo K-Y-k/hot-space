@@ -1,47 +1,32 @@
 var map;
-var marker;
-var select_marker;
+var current_marker;
 var position;
 var infoWindow;
 
 function initMap() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var lat = position.coords.latitude;
-            var lon = position.coords.longitude;
-            position = new naver.maps.LatLng(lat, lon);
+    // 서버에서 받은 좌표를 활용한 지도 생성
+    var lat = parseFloat(document.getElementById("latitude").value);
+    var lon = parseFloat(document.getElementById("longitude").value);
+    position = new naver.maps.LatLng(lat, lon);
 
-            map = new naver.maps.Map('map', {
-                center: position,
-                zoom: 17
-            });
+    map = new naver.maps.Map('map', {
+        center: position,
+        zoom: 17
+    });
 
-            map.setCursor('pointer');
+    map.setCursor('pointer');
 
-            marker = new naver.maps.Marker({
-                position: position,
-                map: map,
-                icon: {
-                    url: "/img/main/marker.png",
-                    scaledSize: new naver.maps.Size(40, 40),
-                    origin: new naver.maps.Point(0, 0),
-                    anchor: new naver.maps.Point(20, 40)
-                }
-            });
+    // 정보창 생성
+    infoWindow = new naver.maps.InfoWindow({
+        anchorSkew: true
+    });
 
-            infoWindow = new naver.maps.InfoWindow({
-                anchorSkew: true
-            });
+    // 현재 좌표의 주소 정보창 출력
+    searchCoordinateToAddress(position);
 
-            naver.maps.Event.addListener(map, 'click', function(e) {
-                searchCoordinateToAddress(e.coord);
-            });
-        }, function(error) {
-            console.error('Error occurred. Error code: ' + error.code);
-        });
-    } else {
-        console.error('Geolocation은 이 브라우저에 지원하지 않습니다.');
-    }
+    naver.maps.Event.addListener(map, 'click', function(e) {
+        searchCoordinateToAddress(e.coord);
+    });
 }
 naver.maps.onJSContentLoaded = initMap;
 
@@ -74,7 +59,7 @@ function searchCoordinateToAddress(latlng) {
 
         var contentString = [
             '<div class="info_inner">',
-            '   <h3>선택한 위치</h3>',
+            '   <h3>선택된 위치</h3>',
             '   <p>' + address + '</p>',
             '</div>'
         ].join('');
@@ -85,16 +70,22 @@ function searchCoordinateToAddress(latlng) {
 
         if (infoWindow.getMap()) {
             // 기존 마커 지움
-            select_marker.setMap(null);
+            current_marker.setMap(null);
 
             infoWindow.close();
         } else {
             // 선택한 위치의 마커 재생성
             position = new naver.maps.LatLng(click_lat, click_lng);
 
-            select_marker = new naver.maps.Marker({
+            current_marker = new naver.maps.Marker({
                 position: position,
-                map: map
+                map: map,
+                icon: {
+                    url: "/img/main/marker.png",
+                    scaledSize: new naver.maps.Size(40, 40),
+                    origin: new naver.maps.Point(0, 0),
+                    anchor: new naver.maps.Point(20, 40)
+                }
             });
 
             infoWindow.setContent(contentString);
