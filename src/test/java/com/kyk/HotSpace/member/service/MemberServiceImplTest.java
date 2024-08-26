@@ -1,7 +1,7 @@
 package com.kyk.HotSpace.member.service;
 
-import com.kyk.HotSpace.member.domain.dto.JoinForm;
-import com.kyk.HotSpace.member.domain.dto.MemberDto;
+import com.kyk.HotSpace.member.domain.dto.MemberAllDTO;
+import com.kyk.HotSpace.member.domain.dto.MemberDTO;
 import com.kyk.HotSpace.member.domain.dto.UpdateForm;
 import com.kyk.HotSpace.member.domain.entity.Member;
 import com.kyk.HotSpace.member.domain.entity.Role;
@@ -38,7 +38,7 @@ public class MemberServiceImplTest {
 
         // when
         Member savedMember = memberRepository.saveMember(member);
-        MemberDto findMember = memberService.findMemberDtoById(member.getId());
+        MemberAllDTO findMember = memberService.findMemberDtoById(member.getId());
 
         // then
         assertThat(findMember.getId()).isEqualTo(savedMember.getId());
@@ -48,14 +48,13 @@ public class MemberServiceImplTest {
     @DisplayName("회원가입")
     void join() throws IOException {
         // given
-        JoinForm joinForm = new JoinForm("memberA", "ID123", "pass123");
+        Member member = new Member("memberA", "ID123", "pass123", Role.CUSTOMER);
 
         // when
-        Long joinMemberId = memberService.join(joinForm);
+        Member savedMember = memberRepository.saveMember(member);
 
         // then
-        MemberDto findMember = memberService.findMemberDtoById(joinMemberId);
-        assertThat(joinForm.getName()).isEqualTo(findMember.getName());
+        assertThat(member.getName()).isEqualTo(savedMember.getName());
     }
 
     @Test
@@ -66,7 +65,7 @@ public class MemberServiceImplTest {
         Member savedMember = memberRepository.saveMember(member);
 
         // when
-        MemberDto loginMember = memberService.login(savedMember.getLoginId(), savedMember.getPassword());
+        MemberDTO loginMember = memberService.login(savedMember.getLoginId(), savedMember.getPassword());
 
         // then
         assertThat(loginMember.getId()).isEqualTo(savedMember.getId());
@@ -75,19 +74,20 @@ public class MemberServiceImplTest {
 
     @Test
     @DisplayName("회원 정보 수정")
-    void update() {
+    void update() throws IOException {
         // given
         Member member = new Member("memberA", "ID123", "pass123", Role.CUSTOMER);
         Member savedMember = memberRepository.saveMember(member);
 
-        UpdateForm updateForm = new UpdateForm("수정된 이름", "수정된 아이디", "수정된 비밀번호");
+        UpdateForm updateForm = new UpdateForm("수정된 이름", "수정된 비밀번호");
 
         // when
-        memberService.changeProfile(savedMember.getId(), updateForm);
+        savedMember.changeName(updateForm.getName());
+        savedMember.changePassword(updateForm.getPassword());
 
         // then
-        MemberDto fineMember = memberService.findMemberDtoById(savedMember.getId());
-        assertThat(fineMember.getName()).isEqualTo(updateForm.getName());
+        assertThat(savedMember.getName()).isEqualTo(updateForm.getName());
+        assertThat(savedMember.getPassword()).isEqualTo(updateForm.getPassword());
     }
 
 

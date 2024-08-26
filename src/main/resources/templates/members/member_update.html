@@ -1,16 +1,14 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
 <head>
-  <meta charset="utf-8">
-  <!--부트 스트랩 적용-->
+  <meta charset="UTF-8">
+  <!-- 부트 스트랩 css 적용 -->
   <link th:href="@{/css/bootstrap.min.css}"
         href="../css/bootstrap.min.css" rel="stylesheet">
 
-  <!--css 적용-->
-  <link rel="stylesheet" type="text/css" href="../css/stores/store_form_style.css" th:href="@{/css/stores/store_form_style.css}">
-
-  <!--네이버 지도-->
-  <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=z544ho7mtf&submodules=geocoder"></script>
+  <!-- css 적용 -->
+  <link rel="stylesheet" type="text/css" href="../css/members/member_form_style.css" th:href="@{/css/members/member_form_style.css}">
 </head>
 
 <body>
@@ -28,6 +26,29 @@
         <a href="/" class="nav-link text-white" style="font-size: 1.1rem;">
           <img src="/img/main/home_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
           Home
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a th:href="@{/stores/upload}" class="nav-link text-white">
+          <img src="/img/main/store_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
+          가게 등록
+        </a>
+      </li>
+
+      <li class="nav-item"
+          th:if="${session.loginMember != null}">
+        <a th:href="@{/stores/storeList}" class="nav-link text-white">
+          <img src="/img/main/store_setting_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
+          가게 관리
+        </a>
+      </li>
+
+      <li class="nav-item"
+          th:if="${session.loginMember == null}">
+        <a th:href="@{/members/login}" class="nav-link text-white">
+          <img src="/img/main/login_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
+          로그인
         </a>
       </li>
     </ul>
@@ -66,71 +87,54 @@
     </div>
   </nav>
 
-
   <main>
-    <div class="location_find">
-      <input type="text" id="address" class="form-control" placeholder="이동할 주소 입력하세요"
-               onkeydown="handleEnter(event)">
-
-      <button class="btn btn-primary" id="moveToCurrentLocation">내 위치</button>
-    </div>
-
-    <div id="map"></div>
-
-
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-6">
-          <div class="card">
+          <div class="card" style="top: 3%;">
             <div class="card-header text-center">
-              <h4>가게 등록</h4>
+              <h4>회원 수정</h4>
             </div>
 
             <div class="card-body">
-              <form action="" th:action th:object="${uploadForm}" method="post" enctype="multipart/form-data">
+              <div style="display: flex; justify-content: center;">
+                <img th:id="thumbnail"
+                     th:if="${session.loginMember.storedFileName == 'default_icon.PNG'}"
+                     src="/img/main/user_icon.png"
+                     class="rounded-circle"
+                     style="width: 30%; height: 45%;">
+
+                <img th:id="thumbnail"
+                     th:if="${session.loginMember.storedFileName != 'default_icon.PNG'}"
+                     th:src="@{|/profileImageUpload/${session.loginMember.storedFileName}|}"
+                     class="rounded-circle"
+                     style="width: 30%; height: 45%;">
+              </div>
+
+              <form action="" th:action th:object="${updateForm}" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
-                  <select th:field="*{category}" class="form-select" th:errorclass="field-error">
-                    <option value="">시설 종류 선택</option>
-                    <option th:value="식당">식당</option>
-                    <option th:value="편의점">편의점</option>
-                    <option th:value="카페">카페</option>
-                    <option th:value="PC방">PC방</option>
-                    <option th:value="오락시설">오락시설</option>
-                    <option th:value="문화시설">문화시설</option>
-                    <option th:value="운동시설">운동시설</option>
-                    <option th:value="술집">술집</option>
-                    <option th:value="기타">기타</option>
-                  </select>
-                  <div class="error-sign" th:errors="*{category}"></div>
+                  <input class="form-control mt-2" id="InputImage" type="file" name="profileImage" onchange="readURL(this)">
                 </div>
 
                 <div class="mb-3">
-                  <label th:for="img">가게 이미지 선택</label>
-                  <input class="form-control mt-2" type="file" name="imageFiles" multiple>
-                </div>
-
-                <div class="mb-3">
-                  <input type="text" id="store-name" th:field="*{name}" class="form-control" placeholder="가게명"
+                  <input type="text" class="form-control" id="member-name"
+                         th:field="*{name}"
+                         placeholder="변경하실 닉네임을 입력하세요(2~7글자)"
                          th:errorclass="field-error">
                   <div class="error-sign" th:errors="*{name}"></div>
                 </div>
 
                 <div class="mb-3">
-                  <input type="text" id="store-number" th:field="*{number}" class="form-control" placeholder="연락처 ex) 9999-9999-9999"
+                  <input type="password" class="form-control"
+                         th:field="*{password}"
+                         placeholder="변경하실 비밀번호를 입력하세요(3~10글자)"
                          th:errorclass="field-error">
-                  <div class="error-sign" th:errors="*{number}"></div>
+                  <div class="error-sign" th:errors="*{password}"></div>
                 </div>
 
-                <input type="text" id="store-url" th:field="*{siteUrl}" class="form-control" placeholder="홍보 사이트 url (없으면 공백)">
-
-                <input type="hidden" id="store-address" th:field="*{address}">
-                <input type="hidden" id="latitude" th:field="*{latitude}">
-                <input type="hidden" id="longitude" th:field="*{longitude}">
-                <div class="error-sign" th:errors="*{latitude}"></div>
-
                 <div>
-                  <button class="w-100 btn btn-primary" id="register-btn" type="submit">등록</button>
-                  <button class="w-100 btn btn-secondary"
+                  <button class="w-100 btn btn-primary" id="update-btn" type="submit">수정하기</button>
+                  <button class="w-100 btn btn-secondary" onclick="location.href='index.html'"
                           th:onclick="|location.href='@{/}'|"
                           type="button">취소
                   </button>
@@ -143,21 +147,19 @@
     </div>
   </main>
 </div>
-</body>
 
-<!--bootstrapjs-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
-        crossorigin="anonymous">
-</script>
 
-<!--jquery-->
+<!-- 부트스트랩 JS, Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+<!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
         crossorigin="anonymous">
 </script>
 
-<script src="/js/storeUpload.js"></script>
-<script src="/js/address.js"></script>
+<script src="/js/profile.js"></script>
 
+</body>
 </html>

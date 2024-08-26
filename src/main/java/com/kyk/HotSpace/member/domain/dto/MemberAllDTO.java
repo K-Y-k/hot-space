@@ -2,17 +2,15 @@ package com.kyk.HotSpace.member.domain.dto;
 
 import com.kyk.HotSpace.member.domain.entity.Role;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-/**
- * 회원의 민감한 정보를 제외한 내용만 담을 DTO
- */
-@Getter @Setter
+@Data
 @AllArgsConstructor
-public class MemberDto {
+public class MemberAllDTO {
     private Long id;
     private String name;
+    private String loginId;
+    private String password;
     private Role role;
     private String storedFileName;
 }

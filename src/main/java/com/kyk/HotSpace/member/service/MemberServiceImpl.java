@@ -5,7 +5,8 @@ import com.kyk.HotSpace.exception.member.MemberNotFoundException;
 import com.kyk.HotSpace.file.domain.ProfileFile;
 import com.kyk.HotSpace.file.repository.member.ProfileFileRepository;
 import com.kyk.HotSpace.member.domain.dto.JoinForm;
-import com.kyk.HotSpace.member.domain.dto.MemberDto;
+import com.kyk.HotSpace.member.domain.dto.MemberAllDTO;
+import com.kyk.HotSpace.member.domain.dto.MemberDTO;
 import com.kyk.HotSpace.member.domain.dto.UpdateForm;
 import com.kyk.HotSpace.member.domain.entity.Member;
 import com.kyk.HotSpace.member.repository.MemberRepository;
@@ -13,13 +14,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
@@ -91,38 +99,92 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public MemberDto login(String loginId, String password) {
+    public MemberDTO login(String loginId, String password) {
         // 람다를 활용하여 축약
         Member loginMember = memberRepository.findByLoginId(loginId)
                 .filter(m -> m.getPassword().equals(password))
                 .orElseThrow(() -> new MemberNotFoundException("아이디 또는 패스워드가 일치하지 않습니다."));
 
-        log.info("로그인 중 프로필 사진 = {}", loginMember.getProfileFile().getStoredFileName());
+        String storedFileName = (loginMember.getProfileFile() != null)
+                ? loginMember.getProfileFile().getStoredFileName()
+                : "defaultFile"; // 기본값 설정
 
-        return new MemberDto(loginMember.getId(), loginMember.getName(), loginMember.getRole(), loginMember.getProfileFile().getStoredFileName());
+        return new MemberDTO(loginMember.getId(), loginMember.getName(), loginMember.getRole(), storedFileName);
     }
 
 
     @Override
-    public MemberDto findMemberDtoById(Long memberId) {
+    public MemberAllDTO findMemberDtoById(Long memberId) {
         Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("회원 찾기 실패: 회원을 찾을 수 없습니다." + memberId));
 
-        return new MemberDto(findMember.getId(), findMember.getName(),  findMember.getRole(), findMember.getProfileFile().getStoredFileName());
+        String storedFileName = "defaultFileName";
+        if (findMember.getProfileFile() != null) {
+            storedFileName = findMember.getProfileFile().getStoredFileName();
+        }
+
+        return new MemberAllDTO(findMember.getId(), findMember.getName(), findMember.getLoginId(), findMember.getPassword(), findMember.getRole(), storedFileName);
     }
 
 
     @Override
-    public void changeProfile(Long memberId, UpdateForm form) {
-        Member findMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("회원 찾기 실패: 회원을 찾을 수 없습니다." + memberId));
+    public void changeProfile(MemberDTO loginMember, UpdateForm form) throws IOException {
+        Member findMember = memberRepository.findById(loginMember.getId())
+                .orElseThrow(() -> new IllegalArgumentException("회원 찾기 실패: 회원을 찾을 수 없습니다." + loginMember.getId()));
 
-        findMember.changeProfile(form.getName(), form.getLoginId(), form.getPassword());
+        // 이름 수정
+        if (form.getName() != null) {
+            log.info("받아온 이름={}", form.getName());
+            findMember.changeName(form.getName());
+        }
+
+        // 비밀번호 수정
+        if (form.getPassword() != null) {
+            log.info("받아온 비밀번호={}", form.getPassword());
+            findMember.changePassword(form.getPassword());
+        }
+
+        // 프로필 사진 수정
+        if (!form.getProfileImage().isEmpty()) {
+            // 실제 파일 삭제
+            deleteProfileLocalFile(findMember.getProfileFile().getStoredFileName());
+
+            // DB 파일 삭제
+            profileFileRepository.deleteByMemberId(findMember.getId());
+            
+            // 새로 받은 사진으로 실제 파일 + DB 파일 생성
+            uploadProfileFile(form.getProfileImage(), findMember);
+
+            // 로그인한 프로필 사진명 재설정
+            ProfileFile findProfileFile = profileFileRepository.findByMemberId(findMember.getId()).get();
+            loginMember.setStoredFileName(findProfileFile.getStoredFileName());
+        }
+
+        log.info("업데이트 완료");
+    }
+
+    private void deleteProfileLocalFile(String storedFileName) {
+        Path beforeAttachPath = Paths.get(profileLocation+"\\" + storedFileName);
+        try {
+            Files.deleteIfExists(beforeAttachPath);
+        } catch (DirectoryNotEmptyException e) {
+            log.info("디렉토리가 비어있지 않습니다");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
     @Override
     public void delete(Long memberId) {
+        // 프로필 파일, 엔티티 삭제
+        Optional<ProfileFile> findProfileFile = profileFileRepository.findByMemberId(memberId);
+        if (findProfileFile.isPresent()) {
+            deleteProfileLocalFile(findProfileFile.get().getStoredFileName());
+            profileFileRepository.deleteByMemberId(memberId);
+        }
+
+        // 회원 엔티티 삭제
         memberRepository.delete(memberId);
     }
 }

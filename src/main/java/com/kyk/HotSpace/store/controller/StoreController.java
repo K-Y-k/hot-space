@@ -1,7 +1,7 @@
 package com.kyk.HotSpace.store.controller;
 
 import com.kyk.HotSpace.member.domain.LoginSessionConst;
-import com.kyk.HotSpace.member.domain.dto.MemberDto;
+import com.kyk.HotSpace.member.domain.dto.MemberDTO;
 import com.kyk.HotSpace.store.domain.dto.StoreUploadForm;
 import com.kyk.HotSpace.store.domain.entity.Store;
 import com.kyk.HotSpace.store.service.StoreServiceImpl;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @Slf4j
 @Controller
@@ -28,7 +27,7 @@ public class StoreController {
     private final StoreServiceImpl storeService;
 
     @GetMapping("/upload")
-    public String uploadForm(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDto loginMember,
+    public String uploadForm(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDTO loginMember,
                              @ModelAttribute("uploadForm") StoreUploadForm storeUploadForm,
                              Model model) {
         // 세션에 회원 데이터가 없으면 홈 화면으로 이동
@@ -44,7 +43,7 @@ public class StoreController {
     }
 
     @PostMapping("/upload")
-    public String storeUpload(@SessionAttribute(LoginSessionConst.LOGIN_MEMBER) MemberDto loginMember,
+    public String storeUpload(@SessionAttribute(LoginSessionConst.LOGIN_MEMBER) MemberDTO loginMember,
                               @Valid @ModelAttribute("uploadForm") StoreUploadForm form, BindingResult bindingResult) throws IOException {
         log.info("가게 이름 = {}", form.getName());
         log.info("가게 연락처 = {}", form.getNumber());
@@ -63,7 +62,7 @@ public class StoreController {
 
 
     @GetMapping("/storeList")
-    public String storeList(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDto loginMember,
+    public String storeList(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDTO loginMember,
                             @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                             Model model) {
         // 세션에 회원 데이터가 없으면 홈 화면으로 이동
