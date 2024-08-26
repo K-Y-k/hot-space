@@ -14,7 +14,7 @@ public interface StoreService {
     Optional<Store> findById(Long id);
     Long saveStore(Long memberId, StoreUploadForm form) throws IOException;
 
-    void changeStore(Long memberId, StoreUpdateForm form);
+    void changeStore(Long storeId, StoreUpdateForm form) throws IOException;
 
     void deleteStore(Long memberId);
 

@@ -20,7 +20,6 @@ public class StoreUploadForm {
     @NotBlank(message = "가게 이름을 입력해주세요")
     private String name;
 
-    @NotBlank(message = "주소를 입력해주세요")
     private String address;
 
     @NotBlank(message = "연락처를 입력해주세요(- 포함)")

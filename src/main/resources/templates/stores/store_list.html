@@ -53,7 +53,11 @@
             </a>
 
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                <li><a class="dropdown-item" href="#">프로필</a></li>
+                <li><a class="dropdown-item" th:href="@{/members/{memberId}/delete(memberId=${session.loginMember.id})}">회원탈퇴</a></li>
+
+                <li><hr class="dropdown-divider"></li>
+
+                <li><a class="dropdown-item" th:href="@{/members/{memberId}/update(memberId=${session.loginMember.id})}">설정</a></li>
 
                 <li><hr class="dropdown-divider"></li>
 
@@ -108,8 +112,8 @@
                     </td>
 
                     <td class="col-md-2">
-                        <a th:href="@{/stores/{storeId}/delete(storeId=${store.id})}" class="flex-grow-1 mx-1">
-                            <button type="button" class="btn btn-primary w-100">가게 삭제</button>
+                        <a th:href="@{/stores/{storeId}/update(storeId=${store.id})}" class="flex-grow-1 mx-1">
+                            <button type="button" class="btn btn-primary w-100">가게 수정/삭제</button>
                         </a>
                     </td>
                 </tr>

@@ -3,7 +3,8 @@ package com.kyk.HotSpace.member.controller;
 import com.kyk.HotSpace.member.domain.LoginSessionConst;
 import com.kyk.HotSpace.member.domain.dto.JoinForm;
 import com.kyk.HotSpace.member.domain.dto.LoginForm;
-import com.kyk.HotSpace.member.domain.dto.MemberDto;
+import com.kyk.HotSpace.member.domain.dto.MemberDTO;
+import com.kyk.HotSpace.member.domain.dto.UpdateForm;
 import com.kyk.HotSpace.member.service.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class MemberController {
 
 
     /**
-     *  회원 등록 폼
+     * 회원 등록 폼
      */
     @GetMapping("/join")
     public String memberRegisterForm(@ModelAttribute("joinForm") JoinForm form) { // 컨트롤러에서 뷰로 넘어갈 때 이 데이터를 넣어 보낸다.
@@ -34,7 +35,7 @@ public class MemberController {
     }
 
     /**
-     *  회원 저장 기능
+     * 회원 저장 기능
      */
     @PostMapping("/join")
     public String save(@Valid @ModelAttribute("joinForm") JoinForm form,
@@ -77,7 +78,7 @@ public class MemberController {
 
 
         // 성공시 로그인 기능 적용후 멤버에 저장 틀릴시 예외처리
-        MemberDto loginMember = memberService.login(loginForm.getLoginId(), loginForm.getPassword()); // 폼에 입력한 아이디 패스워드 가져와서 멤버로 저장
+        MemberDTO loginMember = memberService.login(loginForm.getLoginId(), loginForm.getPassword()); // 폼에 입력한 아이디 패스워드 가져와서 멤버로 저장
         log.info("login? {}", loginMember);
 
 
@@ -109,4 +110,90 @@ public class MemberController {
         return "redirect:/";
     }
 
+
+    /**
+     * 회원 수정 폼
+     */
+    @GetMapping("/{memberId}/update")
+    public String memberUpdateForm(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER) MemberDTO loginMember,
+                                   @ModelAttribute("updateForm") UpdateForm form,
+                                   @PathVariable Long memberId,
+                                   Model model) {
+        // 세션 회원 검증
+        if (loginMember == null) {
+            model.addAttribute("message", "회원만 이용할 수 있습니다. 로그인 먼저 해주세요!");
+            model.addAttribute("redirectUrl", "/members/login");
+            return "messages";
+        }
+
+        // 본인 프로필인지 검증
+        if (loginMember.getId() != memberId) {
+            model.addAttribute("message", "본인 프로필이 아닙니다.");
+            model.addAttribute("redirectUrl", "/");
+            return "messages";
+        }
+
+        form.setName(loginMember.getName());
+        form.setPassword(memberService.findMemberDtoById(memberId).getPassword());
+
+        log.info("기존 이름 = {}", form.getName());
+        log.info("기존 비밀번호 = {}", form.getPassword());
+
+        return "members/member_update";
+    }
+
+    /**
+     * 회원 수정 기능
+     */
+    @PostMapping("/{memberId}/update")
+    public String memberUpdate(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER) MemberDTO loginMember,
+                               @Valid @ModelAttribute("updateForm") UpdateForm form,
+                               BindingResult bindingResult,
+                               @PathVariable Long memberId, Model model,
+                               HttpServletRequest request) throws IOException {
+        if (bindingResult.hasErrors()) {
+            return "members/member_update";
+        }
+
+        log.info("받아온 이름 = {}", form.getName());
+        log.info("받아온 비밀번호 = {}", form.getPassword());
+
+        memberService.changeProfile(loginMember, form);
+
+        // 프로필 사진 갱신을 위해 로그아웃
+        HttpSession session = request.getSession(false);
+        if (session != null) { 
+            session.invalidate();
+            log.info("로그아웃 완료");
+        }
+        
+        // 다시 로그인 처리
+        HttpSession newSession = request.getSession();
+        newSession.setAttribute(LoginSessionConst.LOGIN_MEMBER, loginMember);
+
+        model.addAttribute("message", "수정 되었습니다!");
+        model.addAttribute("redirectUrl", "/members/" + memberId + "/update");
+        return "messages";
+    }
+
+    /**
+     * 회원 탈퇴 기능
+     */
+    @GetMapping("/{memberId}/delete")
+    public String memberDelete(HttpServletRequest request,
+                               @PathVariable Long memberId, Model model) {
+        // 회원, 프로필 DB/파일 삭제
+        memberService.delete(memberId);
+
+        // 로그아웃 처리
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+            log.info("로그아웃 완료");
+        }
+
+        model.addAttribute("message", "회원탈퇴 되었습니다!");
+        model.addAttribute("redirectUrl", "/");
+        return "messages";
+    }
 }
