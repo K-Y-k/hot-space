@@ -1,0 +1,12 @@
+.card {
+    width: 35%;
+    font-size: 1.0rem;
+}
+
+.field-error {
+    border: 1px solid red;
+}
+.error-sign {
+    color: red;
+    font-size: 0.8rem;
+}
