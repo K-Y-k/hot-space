@@ -1,5 +1,6 @@
 package com.kyk.HotSpace.store.service;
 
+import com.kyk.HotSpace.file.domain.ProfileFile;
 import com.kyk.HotSpace.file.domain.StoreFile;
 import com.kyk.HotSpace.file.repository.store.StoreFileRepository;
 import com.kyk.HotSpace.member.domain.entity.Member;
@@ -20,6 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -84,13 +89,55 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public void changeStore(Long memberId, StoreUpdateForm form) {
+    public void changeStore(Long storeId, StoreUpdateForm form) throws IOException {
+        Store findStore = storeRepository.findById(storeId).orElseThrow(() ->
+                new IllegalArgumentException("가져오기 실패: 가게를 찾지 못했습니다." + storeId));
 
+        // 필드 변경
+        findStore.changeStore(form);
+        
+        // 이미지 파일들 변경
+        if (!form.getImageFiles().get(0).getOriginalFilename().isBlank()) {
+            List<StoreFile> findStoreFiles = storeFileRepository.findByStoreId(findStore.getId());
+            
+            for (StoreFile findStoreFile : findStoreFiles) {
+                // 실제 파일 삭제
+                deleteLocalFile(findStoreFile.getStoredFileName());
+
+                // DB 파일 삭제
+                storeFileRepository.deleteByStoreId(findStore.getId());
+            }
+
+            // 새로 받은 사진으로 실제 파일들 + DB 파일 생성
+            fileUpload(form.getImageFiles(), findStore);
+        }
+        
+        log.info("업데이트 완료");
+    }
+    private void deleteLocalFile(String storedFileName) {
+        Path beforeAttachPath = Paths.get(storeFileLocation +"\\" + storedFileName);
+        try {
+            Files.deleteIfExists(beforeAttachPath);
+        } catch (DirectoryNotEmptyException e) {
+            log.info("디렉토리가 비어있지 않습니다");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void deleteStore(Long memberId) {
+    public void deleteStore(Long storeId) {
+        List<StoreFile> findStoreFiles = storeFileRepository.findByStoreId(storeId);
 
+        for (StoreFile findStoreFile : findStoreFiles) {
+            // 실제 파일 삭제
+            deleteLocalFile(findStoreFile.getStoredFileName());
+
+            // DB 파일 삭제
+            storeFileRepository.deleteByStoreId(storeId);
+        }
+
+        storeRepository.delete(storeId);
     }
 
     @Override
