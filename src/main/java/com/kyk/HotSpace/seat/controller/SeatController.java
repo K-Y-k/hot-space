@@ -2,16 +2,14 @@ package com.kyk.HotSpace.seat.controller;
 
 import com.kyk.HotSpace.member.domain.LoginSessionConst;
 import com.kyk.HotSpace.member.domain.dto.MemberDTO;
+import com.kyk.HotSpace.reservation.domain.dto.ReservationUploadForm;
 import com.kyk.HotSpace.seat.domain.dto.SeatStatistics;
 import com.kyk.HotSpace.seat.service.SeatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
@@ -63,10 +61,17 @@ public class SeatController {
     }
 
     @GetMapping("/{storeId}/state/view")
-    public String seatsView(@PathVariable Long storeId,
+    public String seatsView(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDTO loginMember,
+                            @ModelAttribute("uploadForm") ReservationUploadForm form,
+                            @PathVariable Long storeId,
                             Model model) {
 
         SeatStatistics seatStatistics = seatService.statisticsResult(storeId);
+
+        if (loginMember != null) {
+            form.setName(loginMember.getName());
+        }
+        form.setGuestCount(1);
 
         model.addAttribute("totalCount", seatStatistics.getTotalCount());
         model.addAttribute("usingCount", seatStatistics.getUsingCount());

@@ -136,6 +136,7 @@ public class MemberServiceImpl implements MemberService {
         if (form.getName() != null) {
             log.info("받아온 이름={}", form.getName());
             findMember.changeName(form.getName());
+            loginMember.setName(form.getName());
         }
 
         // 비밀번호 수정

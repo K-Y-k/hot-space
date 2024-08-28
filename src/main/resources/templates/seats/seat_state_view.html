@@ -52,6 +52,64 @@
     </div>
   </main>
 
+  <!-- 예약 모달 -->
+  <div class="modal fade" id="reservationModal" tabindex="-1" role="dialog" aria-labelledby="reservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="reservationModalLabel">예약</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <form action="" th:action th:object="${uploadForm}" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+              <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="성함"
+                     th:errorclass="field-error">
+              <div class="error-sign" th:errors="*{name}"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="phoneNum">연락처</label>
+              <input type="text" class="form-control" id="phoneNum" th:field="*{phoneNum}" placeholder="연락처"
+                     th:errorclass="field-error">
+              <div class="error-sign" th:errors="*{phoneNum}"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="date">예약 날짜</label>
+              <input type="date" class="form-control" id="date" th:field="*{date}"
+                     th:errorclass="field-error">
+              <div class="error-sign" th:errors="*{date}"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="time">예약 시간</label>
+              <input type="time" class="form-control" id="time" th:field="*{time}"
+                     th:errorclass="field-error">
+              <div class="error-sign" th:errors="*{time}"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="guests">참석 인원</label>
+              <div class="quantity-selector">
+                <button type="button" class="btn btn-outline-primary" onclick="adjustQuantity(1)">+</button>
+                <input type="text" id="guests" class="form-control" th:field="*{guestCount}" readonly>
+                <button type="button" class="btn btn-outline-primary" onclick="adjustQuantity(-1)">-</button>
+              </div>
+            </div>
+
+            <div>
+              <button class="w-100 btn btn-primary" id="register-btn" type="submit">예약하기</button>
+              <button class="w-100 btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <!-- 부트스트랩 JS, Popper.js -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
@@ -74,7 +132,8 @@
   var storeId = [[${storeId}]];
 </script>
 
-<script src="/js/seatStateCustomer.js"></script>
+<script src="/js/seats/seatStateCustomer.js"></script>
+<script src="/js/reservations/reservation.js"></script>
 
 </body>
 </html>
