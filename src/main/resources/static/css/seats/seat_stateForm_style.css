@@ -67,3 +67,12 @@ main {
     display: flex;
     justify-content: between;
 }
+
+
+.quantity-selector {
+    display: flex;
+}
+.quantity-selector input {
+    text-align: center;
+    width: 20%;
+}

@@ -40,17 +40,16 @@ $(document).ready(function() {
                 seatElement.setAttribute('data-posy', seat.posY);
                 seatElement.setAttribute('data-capacity', seat.tableCapacity);
 
+                // 좌석 클릭 이벤트
+                seatElement.addEventListener('click', function(event) {
+                    if (!event.target.classList.contains('noAvailable')) {
+                        // 예약 창 띄우기
+                        $('#reservationModal').modal('show');
+                    }
+                });
+
                 // 좌석을 seat-container에 추가
                 container.appendChild(seatElement);
-            });
-
-
-            // 좌석 클릭 이벤트
-            container.addEventListener('click', function(event) {
-                if (!event.target.classList.contains('noAvailable')) {
-                    // 예약 창 띄우기
-                    $('#reservationModal').modal('show');
-                }
             });
         },
         error: function (status, error) {

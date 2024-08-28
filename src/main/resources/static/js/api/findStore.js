@@ -74,8 +74,7 @@ function fetchMarkers(center_lat, center_lng) {
                                     <br>
 
                                     <div class="button-container">
-                                        <button class="btn btn-primary" style="width: 50%; height: 20%;" onclick="location.href='/seats/${storeDetailResult.id}/state/view'">테이블</button>
-                                        <button class="btn btn-secondary" style="width: 50%; height: 20%;">예약</button>
+                                        <button class="btn btn-primary" style="width: 50%; height: 20%;" onclick="location.href='/seats/${storeDetailResult.id}/state/view'">테이블 확인/예약</button>
                                     </div>
                                 </div>
                             `;
