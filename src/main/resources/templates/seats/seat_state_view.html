@@ -62,7 +62,9 @@
         </div>
 
         <div class="modal-body">
-          <form action="" th:action th:object="${uploadForm}" method="post" enctype="multipart/form-data">
+          <form th:action="@{/reservations/upload/{storeId}(storeId=${storeId})}" th:object="${uploadForm}" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="seatIdInput" name="seatId"/>
+
             <div class="mb-3">
               <label for="name">성함</label>
               <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="성함"
@@ -78,17 +80,10 @@
             </div>
 
             <div class="mb-3">
-              <label for="date">예약 날짜</label>
-              <input type="date" class="form-control" id="date" th:field="*{date}"
+              <label for="dateTime">예약 일시</label>
+              <input type="datetime-local" class="form-control" id="dateTime" th:field="*{dateTime}"
                      th:errorclass="field-error">
-              <div class="error-sign" th:errors="*{date}"></div>
-            </div>
-
-            <div class="mb-3">
-              <label for="time">예약 시간</label>
-              <input type="time" class="form-control" id="time" th:field="*{time}"
-                     th:errorclass="field-error">
-              <div class="error-sign" th:errors="*{time}"></div>
+              <div class="error-sign" th:errors="*{dateTime}"></div>
             </div>
 
             <div class="mb-3">

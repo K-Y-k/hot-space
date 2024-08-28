@@ -43,6 +43,9 @@ $(document).ready(function() {
                 // 좌석 클릭 이벤트
                 seatElement.addEventListener('click', function(event) {
                     if (!event.target.classList.contains('noAvailable')) {
+                        // 선택한 좌석 ID를 숨겨진 입력 필드에 설정
+                        document.getElementById('seatIdInput').value = event.target.getAttribute('data-seatId');
+
                         // 예약 창 띄우기
                         $('#reservationModal').modal('show');
                     }

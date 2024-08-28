@@ -45,7 +45,7 @@ public class SeatServiceImplTest {
     @DisplayName("등록한 가게에 배치한 좌석 저장")
     void saveSeat() {
         // given
-        Seat seat1 = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+        Seat seat1 = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore, null);
 
         // when
         Seat savedSeat = seatRepository.saveSeat(seat1);
@@ -58,7 +58,7 @@ public class SeatServiceImplTest {
     @DisplayName("등록한 가게에 좌석들 중 좌석 id로 찾기")
     void findById() {
         // given
-        Seat seat1 = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+        Seat seat1 = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore, null);
         Seat savedSeat = seatRepository.saveSeat(seat1);
 
         // when
@@ -73,7 +73,7 @@ public class SeatServiceImplTest {
     void findFirstSeatByStoreId() {
         // given
         for (int i = 0; i < 3; i++) {
-            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore, null);
             seatRepository.saveSeat(newSeat);
         }
 
@@ -89,7 +89,7 @@ public class SeatServiceImplTest {
     void findSeatsByStoreId() {
         // given
         for (int i = 0; i < 3; i++) {
-            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore, null);
             seatRepository.saveSeat(newSeat);
         }
 
@@ -108,7 +108,7 @@ public class SeatServiceImplTest {
         Store savedStore = storeRepository.save(store);
 
         for (int i = 0; i < 3; i++) {
-            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore, null);
             seatRepository.saveSeat(newSeat);
         }
 
@@ -125,12 +125,12 @@ public class SeatServiceImplTest {
     void statistics() {
         // given
         for (int i = 0; i < 7; i++) {
-            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore, null);
             seatRepository.saveSeat(newSeat);
         }
 
         for (int i = 0; i < 3; i++) {
-            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, false, savedStore);
+            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, false, savedStore, null);
             seatRepository.saveSeat(newSeat);
         }
 
