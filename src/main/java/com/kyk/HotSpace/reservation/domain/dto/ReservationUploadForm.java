@@ -3,12 +3,10 @@ package com.kyk.HotSpace.reservation.domain.dto;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,7 +22,6 @@ public class ReservationUploadForm {
     @NotNull(message = "예약 일시를 입력해 주세요.")
     private String dateTime;
 
-    @NotNull(message = "참석 인원을 입력해 주세요.")
     @Min(value = 1, message = "참석 인원은 1명 이상이어야 합니다.")
     private int guestCount;
 }

@@ -8,7 +8,7 @@
           href="../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- css 적용 -->
-    <link rel="stylesheet" type="text/css" href="../css/stores/storeList_form_style.css" th:href="@{/css/stores/storeList_form_style.css}">
+    <link rel="stylesheet" type="text/css" href="../css/reservations/reservation_form_style.css" th:href="@{/css/reservations/reservation_form_style.css}">
 </head>
 
 <body>
@@ -33,14 +33,6 @@
                 <a th:href="@{/stores/upload}" class="nav-link text-white">
                     <img src="/img/main/store_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
                     가게 등록
-                </a>
-            </li>
-
-            <li class="nav-item"
-                th:if="${session.loginMember != null}">
-                <a th:href="@{/reservations/list}" class="nav-link text-white">
-                    <img src="/img/main/reservation_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
-                    예약 현황
                 </a>
             </li>
         </ul>
@@ -84,44 +76,43 @@
         <table class="table">
             <thead class="table-dark">
             <tr>
-                <th class="col-md-2" style="text-align: center; margin: 0 auto;">가게명</th>
+                <th class="col-md-2" style="text-align: center; margin: 0 auto;">예약 가게명</th>
                 <th class="col-md-2" style="text-align: center; margin: 0 auto;">시설종류</th>
-                <th class="col-md-2" style="text-align: center; margin: 0 auto;">등록일</th>
-                <th class="col-md-2" style="text-align: center; margin: 0 auto;"></th>
-                <th class="col-md-2" style="text-align: center; margin: 0 auto;"></th>
+                <th class="col-md-2" style="text-align: center; margin: 0 auto;">예약일</th>
+                <th class="col-md-2" style="text-align: center; margin: 0 auto;">참석인원</th>
+                <th class="col-md-2" style="text-align: center; margin: 0 auto;">상태</th>
                 <th class="col-md-2" style="text-align: center; margin: 0 auto;"></th>
             </tr>
             </thead>
 
             <tbody>
-                <tr th:each="store : ${stores}">
+                <tr th:each="reservation : ${reservations}">
                     <td class="col-md-2" style="text-align: center; margin: 0 auto;"
-                        th:text="${store.name}"></td>
+                        th:text="${reservation.store.name}"></td>
                     </td>
 
                     <td class="col-md-2" style="text-align: center; margin: 0 auto;"
-                        th:text="${store.category}"></td>
+                        th:text="${reservation.store.category}"></td>
                     </td>
 
                     <td class="col-md-2"
                         style="text-align: center; margin: 0 auto;"
-                        th:text="${#temporals.format(store.createdDate, 'yyyy-MM-dd')}"></td>
+                        th:text="${#temporals.format(reservation.dateTime, 'yyyy-MM-dd')}"></td>
 
-                    <td class="col-md-2">
-                        <a th:href="@{/seats/{storeId}/setting(storeId=${store.id})}" class="flex-grow-1 mx-1">
-                            <button type="button" class="btn btn-primary w-100">좌석 배치</button>
-                        </a>
+                    <td class="col-md-2" style="text-align: center; margin: 0 auto;"
+                        th:text="${reservation.guestCount}"></td>
                     </td>
 
-                    <td class="col-md-2">
-                        <a th:href="@{/seats/{storeId}/state(storeId=${store.id})}" class="flex-grow-1 mx-1">
-                            <button type="button" class="btn btn-primary w-100">좌석 현황</button>
-                        </a>
-                    </td>
+                    <td class="col-md-2" style="text-align: center; margin: 0 auto;"
+                        th:if="${reservation.approvalState == true}"
+                        th:text="'승인완료'"></td>
+                    <td class="col-md-2" style="text-align: center; margin: 0 auto;"
+                        th:if="${reservation.approvalState == false}"
+                        th:text="'승인대기'"></td>
 
                     <td class="col-md-2">
-                        <a th:href="@{/stores/{storeId}/update(storeId=${store.id})}" class="flex-grow-1 mx-1">
-                            <button type="button" class="btn btn-primary w-100">가게 수정/삭제</button>
+                        <a th:href="@{/reservations/{reservationId}/delete(reservationId=${reservation.id})}" class="flex-grow-1 mx-1">
+                            <button type="button" class="btn btn-primary w-100">취소</button>
                         </a>
                     </td>
                 </tr>
@@ -132,13 +123,13 @@
         <nav class="page-nav">
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${!hasPrev} ? 'disabled'">
-                    <a class="page-link" th:href="@{/stores/storeList(page=${previous})}">이전</a>
+                    <a class="page-link" th:href="@{/reservations/list(page=${previous})}">이전</a>
                 </li>
 
                 <li class="page-item" th:each="page : ${#numbers.sequence(startPage, endPage)}">
                     <a class="page-link"
                        th:if="${page != nowPage} and ${page != 0}"
-                       th:href="@{/stores/storeList(page = ${page - 1})}"
+                       th:href="@{/reservations/list(page = ${page - 1})}"
                        th:text="${page}"></a>
 
                     <strong class="page-link"
@@ -148,7 +139,7 @@
 
 
                 <li class="page-item" th:classappend="${!hasNext} ? 'disabled'">
-                    <a class="page-link" th:href="@{/stores/storeList(page=${next})}">다음</a>
+                    <a class="page-link" th:href="@{/reservations/list(page=${next})}">다음</a>
                 </li>
             </ul>
         </nav>

@@ -30,7 +30,7 @@ public class SeatServiceImplTest {
     @BeforeEach
     void setUp() {
         // 공통으로 사용하는 Store 객체를 생성하고 저장
-        Store store = new Store(null, "편의점", "ec편의점", "유성구~~대로", "010-0200-0200", "www.dasd.com", 40.2, 33.5, null, null, null);
+        Store store = new Store(null, "편의점", "ec편의점", "유성구~~대로", "010-0200-0200", "www.dasd.com", 40.2, 33.5, null, null, null, null);
         savedStore = storeRepository.save(store);
     }
 
@@ -104,7 +104,7 @@ public class SeatServiceImplTest {
     @DisplayName("storeId에 해당하는 좌석 데이터 모두 삭제")
     void deleteAllByStoreId() {
         // given
-        Store store = new Store(null, "편의점", "ec편의점", "유성구~~대로", "010-0200-0200", "www.dasd.com", 40.2, 33.5, null, null, null);
+        Store store = new Store(null, "편의점", "ec편의점", "유성구~~대로", "010-0200-0200", "www.dasd.com", 40.2, 33.5, null, null, null, null);
         Store savedStore = storeRepository.save(store);
 
         for (int i = 0; i < 3; i++) {

@@ -52,7 +52,7 @@ public class StoreServiceImplTest {
     @DisplayName("가게 저장 및 조회")
     void save_store() {
         // given
-        Store store = new Store(1L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 15.33, 17.44, savedMember, null, null);
+        Store store = new Store(1L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 15.33, 17.44, savedMember, null, null, null);
 
         // when
         Store savedStore = storeRepository.save(store);
@@ -68,7 +68,7 @@ public class StoreServiceImplTest {
     @DisplayName("반경 500m 등록된 가게 찾기")
     void find_store_withinRadius() {
         // given
-        Store store = new Store(1L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null);
+        Store store = new Store(1L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null, null);
         Store savedStore = storeRepository.save(store);
 
         // when
@@ -83,10 +83,10 @@ public class StoreServiceImplTest {
     @DisplayName("가게 종류에 맞는 반경 500m 등록된 가게 찾기")
     void find_store_withinRadius_byCategory() {
         // given
-        Store store1 = new Store(1L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null);
+        Store store1 = new Store(1L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null, null);
         storeRepository.save(store1);
 
-        Store store2 = new Store(2L, "pc방", "가게2", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null);
+        Store store2 = new Store(2L, "pc방", "가게2", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null, null);
         Store savedStore2 = storeRepository.save(store2);
 
         // when
@@ -102,9 +102,9 @@ public class StoreServiceImplTest {
     @DisplayName("내가 등록한 가게 리스트")
     void storeList() {
         // given
-        Store store1 = new Store(1L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null);
-        Store store2 = new Store(2L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null);
-        Store store3 = new Store(3L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null);
+        Store store1 = new Store(1L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null, null);
+        Store store2 = new Store(2L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null, null);
+        Store store3 = new Store(3L, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null, null);
         storeRepository.save(store1);
         storeRepository.save(store2);
         storeRepository.save(store3);
@@ -126,7 +126,7 @@ public class StoreServiceImplTest {
     @DisplayName("가게 수정")
     void storeUpdate() {
         // given
-        Store store1 = new Store(null, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null);
+        Store store1 = new Store(null, "식당", "가게1", "유성구 xx로", "0000-0000-0000", null, 36.3691624, 127.3460812, savedMember, null, null, null);
         Store savedStore = storeRepository.save(store1);
 
         StoreUpdateForm storeUpdateForm = new StoreUpdateForm("수정카테고리", "수정가게명", "수정주소", "수정번호");
