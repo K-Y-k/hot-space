@@ -3,6 +3,7 @@ package com.kyk.HotSpace.reservation.service;
 import com.kyk.HotSpace.member.domain.entity.Member;
 import com.kyk.HotSpace.member.repository.MemberRepository;
 import com.kyk.HotSpace.reservation.domain.dto.ReservationUploadForm;
+import com.kyk.HotSpace.reservation.domain.entity.ApprovalState;
 import com.kyk.HotSpace.reservation.domain.entity.Reservation;
 import com.kyk.HotSpace.reservation.repository.ReservationRepository;
 import com.kyk.HotSpace.seat.domain.entity.Seat;
@@ -38,7 +39,7 @@ public class ReservationServiceImpl implements ReservationService {
                 .phoneNum(form.getPhoneNum())
                 .dateTime(convertDateTime)
                 .guestCount(form.getGuestCount())
-                .approvalState(false)
+                .approvalState(ApprovalState.STAND)
                 .member(member)
                 .store(store)
                 .seat(seat)

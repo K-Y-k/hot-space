@@ -37,8 +37,7 @@ public class Seat extends BaseTimeEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation_id")
+    @OneToOne(mappedBy = "seat", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Reservation reservation;
 
     // 변경감지 메서드

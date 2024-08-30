@@ -17,8 +17,12 @@ $(document).ready(function() {
 
                 // 이용상태에 따른 클래스 설정
                 if (seat.available === false) {
+                    // 예약이 없고 사용 불가능한 경우
                     seatElement.classList.add('noAvailable');
-                }
+                 } else if (seat.reservationDTO && seat.reservationDTO.approvalState === '대기') {
+                    // 예약이 있고, 승인되지 않은 경우
+                    seatElement.classList.add('keeping');
+                 }
 
                 // seatType에 맞는 클래스 설정
                 if (seat.seatType === 'small') {

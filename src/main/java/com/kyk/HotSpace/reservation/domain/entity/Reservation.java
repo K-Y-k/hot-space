@@ -33,8 +33,9 @@ public class Reservation extends BaseTimeEntity {
     @Column(nullable = false)
     private int guestCount;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Boolean approvalState;
+    private ApprovalState approvalState;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -44,6 +45,7 @@ public class Reservation extends BaseTimeEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @OneToOne(mappedBy = "reservation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seat_id")
     private Seat seat;
 }

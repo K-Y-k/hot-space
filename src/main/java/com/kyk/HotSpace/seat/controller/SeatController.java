@@ -54,6 +54,7 @@ public class SeatController {
 
         model.addAttribute("totalCount", seatStatistics.getTotalCount());
         model.addAttribute("usingCount", seatStatistics.getUsingCount());
+        model.addAttribute("reservationCount", seatStatistics.getReservationCount());
         model.addAttribute("remainingCount", seatStatistics.getRemainingCount());
         model.addAttribute("storeId", storeId);
 
@@ -75,6 +76,7 @@ public class SeatController {
 
         model.addAttribute("totalCount", seatStatistics.getTotalCount());
         model.addAttribute("usingCount", seatStatistics.getUsingCount());
+        model.addAttribute("reservationCount", seatStatistics.getReservationCount());
         model.addAttribute("remainingCount", seatStatistics.getRemainingCount());
         model.addAttribute("storeId", storeId);
 

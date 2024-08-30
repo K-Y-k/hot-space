@@ -38,6 +38,9 @@ main {
 .noAvailable {
     background-color: red;
 }
+.keeping {
+    background-color: yellow;
+}
 
 /* 좌석 크기별 스타일 */
 .seat.small {

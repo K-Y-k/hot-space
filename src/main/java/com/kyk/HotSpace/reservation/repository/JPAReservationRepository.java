@@ -5,6 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface JPAReservationRepository extends JpaRepository<Reservation, Long> {
     Page<Reservation> findReservationsByMemberId(Long memberId, Pageable pageable);
+    List<Reservation> findByStore_Id(Long storeId);
 }

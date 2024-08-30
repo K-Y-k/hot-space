@@ -1,5 +1,6 @@
 package com.kyk.HotSpace.seat.controller;
 
+import com.kyk.HotSpace.reservation.domain.dto.ReservationDTO;
 import com.kyk.HotSpace.seat.domain.dto.SeatDTO;
 import com.kyk.HotSpace.seat.domain.entity.Seat;
 import com.kyk.HotSpace.seat.service.SeatService;
@@ -27,7 +28,7 @@ public class SeatApiController {
         log.info("가게 Id = {}", storeId);
         
         for (SeatDTO seatDTO : seatDTOs) {
-            log.info("좌석 정보 = {}", seatDTO.getSeatType());
+            log.info("전송 좌석 정보 = {}", seatDTO.getSeatType());
             log.info("= {}", seatDTO.getTableCapacity());
             log.info("= {}", seatDTO.getPosX());
             log.info("= {}", seatDTO.getPosY());
@@ -43,14 +44,45 @@ public class SeatApiController {
         List<Seat> seats = seatService.findSeatsByStoreId(storeId);
 
         List<SeatDTO> seatDTOs = seats.stream()
-                .map(seat -> new SeatDTO(seat.getId(), seat.getSeatType(), seat.getPosX(), seat.getPosY(), seat.isAvailable(), seat.getTableCapacity()))
+                .map(seat -> {
+                    // 예약이 있는 경우에만 ReservationDTO 생성
+                    ReservationDTO reservationDTO = null;
+                    if (seat.getReservation() != null) {
+                        reservationDTO = new ReservationDTO(
+                                seat.getReservation().getId(),
+                                seat.getReservation().getName(),
+                                seat.getReservation().getPhoneNum(),
+                                seat.getReservation().getDateTime(),
+                                seat.getReservation().getGuestCount(),
+                                seat.getReservation().getApprovalState()
+                        );
+                    }
+
+                    return new SeatDTO(
+                            seat.getId(),
+                            seat.getSeatType(),
+                            seat.getPosX(),
+                            seat.getPosY(),
+                            seat.isAvailable(),
+                            seat.getTableCapacity(),
+                            reservationDTO
+                    );
+                })
                 .collect(Collectors.toList());
 
         for (SeatDTO seatDTO : seatDTOs) {
-            log.info("좌석 정보 = {}", seatDTO.getSeatType());
+            log.info("현황 좌석 정보 = {}", seatDTO.getSeatType());
             log.info("= {}", seatDTO.getTableCapacity());
             log.info("= {}", seatDTO.getPosX());
             log.info("= {}", seatDTO.getPosY());
+
+            if (seatDTO.getReservationDTO() != null) {
+                log.info("예약 정보 = {}", seatDTO.getReservationDTO().getName());
+                log.info("= {}", seatDTO.getReservationDTO().getPhoneNum());
+                log.info("= {}", seatDTO.getReservationDTO().getDateTime());
+                log.info("= {}", seatDTO.getReservationDTO().getGuestCount());
+                log.info("= {}", seatDTO.getReservationDTO().getApprovalState());
+            }
         }
 
         return ResponseEntity.ok(seatDTOs);

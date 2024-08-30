@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,6 +23,11 @@ public class SpringDataJpaReservationRepository implements ReservationRepository
     @Override
     public Optional<Reservation> findById(Long reservationId) {
         return JPAReservationRepository.findById(reservationId);
+    }
+
+    @Override
+    public List<Reservation> findByStore_Id(Long storeId) {
+        return JPAReservationRepository.findByStore_Id(storeId);
     }
 
     @Override
