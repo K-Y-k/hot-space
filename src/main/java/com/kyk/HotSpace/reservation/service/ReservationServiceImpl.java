@@ -63,12 +63,39 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public void changeApprovalState(Long reservationId, ApprovalState approvalState) {
+        Reservation findReservation = reservationRepository.findById(reservationId).orElseThrow(() ->
+                new IllegalArgumentException("예약 가져오기 실패: 예약을 찾지 못했습니다." + reservationId));
+
+        findReservation.changeApprovalState(approvalState);
+    }
+
+    @Override
     public void deleteReservation(Long reservationId) {
         reservationRepository.delete(reservationId);
     }
 
     @Override
+    public Long findSeatId(Long reservationId) {
+        Reservation findReservation = reservationRepository.findById(reservationId).orElseThrow(() ->
+                new IllegalArgumentException("예약 가져오기 실패: 예약을 찾지 못했습니다." + reservationId));
+
+        return findReservation.getSeat().getId();
+    }
+
+    @Override
+    public void cancelReservation(Long seatId) {
+        Optional<Reservation> findReservation = Optional.of(reservationRepository.findBySeatIdAndApprovalState(seatId, ApprovalState.STAND).get());
+        findReservation.ifPresent(reservation -> reservation.changeApprovalState(ApprovalState.REJECT));
+    }
+
+    @Override
     public Page<Reservation> findReservationsByMemberId(Long memberId, Pageable pageable) {
         return reservationRepository.findReservationsByMemberId(memberId, pageable);
+    }
+
+    @Override
+    public Page<Reservation> findByStoreIdAndApprovalState(Pageable pageable, Long storeId, ApprovalState approvalState) {
+        return reservationRepository.findByStoreIdAndApprovalState(pageable, storeId, approvalState);
     }
 }

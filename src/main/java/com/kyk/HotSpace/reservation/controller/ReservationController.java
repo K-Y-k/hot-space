@@ -3,8 +3,10 @@ package com.kyk.HotSpace.reservation.controller;
 import com.kyk.HotSpace.member.domain.LoginSessionConst;
 import com.kyk.HotSpace.member.domain.dto.MemberDTO;
 import com.kyk.HotSpace.reservation.domain.dto.ReservationUploadForm;
+import com.kyk.HotSpace.reservation.domain.entity.ApprovalState;
 import com.kyk.HotSpace.reservation.domain.entity.Reservation;
 import com.kyk.HotSpace.reservation.service.ReservationService;
+import com.kyk.HotSpace.seat.service.SeatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,7 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class ReservationController {
 
+    private final SeatService seatService;
     private final ReservationService reservationService;
 
     @PostMapping("/upload/{storeId}")
@@ -89,5 +92,54 @@ public class ReservationController {
 
 
         return "reservations/reservation_list";
+    }
+
+
+    @GetMapping("/{storeId}/{reservationId}/approve")
+    public String approveReservation(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDTO loginMember,
+                                     @RequestParam String state,
+                                     @PathVariable Long storeId,
+                                     @PathVariable Long reservationId,
+                                     Model model) {
+        // 세션 회원 검증
+        if(loginMember == null) {
+            model.addAttribute("message", "회원만 이용할 수 있습니다. 로그인 먼저 해주세요!");
+            model.addAttribute("redirectUrl", "/members/login");
+            return "messages";
+        }
+
+        ApprovalState approvalState = null;
+
+        if (state.equals("YES")) {
+            approvalState = ApprovalState.APPROVE;
+            seatService.changeAvailable(reservationService.findSeatId(reservationId));
+        }
+        if (state.equals("NO")) {
+            approvalState = ApprovalState.REJECT;
+        }
+
+        reservationService.changeApprovalState(reservationId, approvalState);
+
+        model.addAttribute("message", "처리 완료");
+        model.addAttribute("redirectUrl", "/seats/" + storeId + "/state");
+        return "messages";
+    }
+
+    @GetMapping("/{reservationId}/delete")
+    public String deleteReservation(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDTO loginMember,
+                                    @PathVariable Long reservationId,
+                                    Model model) {
+        // 세션 회원 검증
+        if(loginMember == null) {
+            model.addAttribute("message", "회원만 이용할 수 있습니다. 로그인 먼저 해주세요!");
+            model.addAttribute("redirectUrl", "/members/login");
+            return "messages";
+        }
+
+        reservationService.deleteReservation(reservationId);
+
+        model.addAttribute("message", "처리 되었습니다");
+        model.addAttribute("redirectUrl", "/reservations/list");
+        return "messages";
     }
 }

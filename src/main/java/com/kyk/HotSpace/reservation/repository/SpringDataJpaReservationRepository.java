@@ -1,12 +1,12 @@
 package com.kyk.HotSpace.reservation.repository;
 
+import com.kyk.HotSpace.reservation.domain.entity.ApprovalState;
 import com.kyk.HotSpace.reservation.domain.entity.Reservation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -26,13 +26,18 @@ public class SpringDataJpaReservationRepository implements ReservationRepository
     }
 
     @Override
-    public List<Reservation> findByStore_Id(Long storeId) {
-        return JPAReservationRepository.findByStore_Id(storeId);
+    public Optional<Reservation> findBySeatIdAndApprovalState(Long seatId, ApprovalState approvalState) {
+        return JPAReservationRepository.findBySeatIdAndApprovalState(seatId, approvalState);
     }
 
     @Override
     public Page<Reservation> findReservationsByMemberId(Long memberId, Pageable pageable) {
         return JPAReservationRepository.findReservationsByMemberId(memberId, pageable);
+    }
+
+    @Override
+    public Page<Reservation> findByStoreIdAndApprovalState(Pageable pageable, Long storeId, ApprovalState approvalState) {
+        return JPAReservationRepository.findByStoreIdAndApprovalState(pageable, storeId, approvalState);
     }
 
     @Override

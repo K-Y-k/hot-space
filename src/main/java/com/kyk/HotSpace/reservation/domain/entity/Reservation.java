@@ -48,4 +48,10 @@ public class Reservation extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seat_id")
     private Seat seat;
+
+    
+    // 변경 감지 메서드
+    public void changeApprovalState(ApprovalState state) {
+        this.approvalState = state;
+    }
 }

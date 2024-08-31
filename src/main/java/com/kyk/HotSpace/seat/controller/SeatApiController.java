@@ -1,6 +1,7 @@
 package com.kyk.HotSpace.seat.controller;
 
 import com.kyk.HotSpace.reservation.domain.dto.ReservationDTO;
+import com.kyk.HotSpace.reservation.service.ReservationService;
 import com.kyk.HotSpace.seat.domain.dto.SeatDTO;
 import com.kyk.HotSpace.seat.domain.entity.Seat;
 import com.kyk.HotSpace.seat.service.SeatService;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/seats")
 public class SeatApiController {
     private final SeatService seatService;
+    private final ReservationService reservationService;
 
     @PostMapping("/api/upload/{storeId}")
     public ResponseEntity<?> seatUpload(@RequestBody List<SeatDTO> seatDTOs, @PathVariable Long storeId) {
@@ -92,6 +94,9 @@ public class SeatApiController {
     @PostMapping("/api/update/available/{seatId}")
     public ResponseEntity<?> updateAvailable(@PathVariable Long seatId) {
         log.info("선택한 좌석 Id ={}", seatId);
+
+        // 만약 예약 중인 경우 상태 변경
+        reservationService.cancelReservation(seatId);
 
         SeatDTO seatDTO = seatService.changeAvailable(seatId);
 

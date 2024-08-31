@@ -26,6 +26,12 @@ main {
     height: 500px;
     border: 1px solid #ccc;
 }
+.reservation-container {
+     position: absolute;
+     top: 150px;
+     left: 1350px;
+     text-align: center;
+}
 
 
 .seat {
@@ -41,6 +47,12 @@ main {
 .keeping {
     background-color: yellow;
 }
+
+.table {
+    width: 700px;
+    height: 500px;
+}
+
 
 /* 좌석 크기별 스타일 */
 .seat.small {

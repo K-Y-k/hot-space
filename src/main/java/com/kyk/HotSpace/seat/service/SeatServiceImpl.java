@@ -1,6 +1,6 @@
 package com.kyk.HotSpace.seat.service;
 
-import com.kyk.HotSpace.reservation.domain.dto.ReservationDTO;
+import com.kyk.HotSpace.reservation.domain.entity.ApprovalState;
 import com.kyk.HotSpace.reservation.domain.entity.Reservation;
 import com.kyk.HotSpace.reservation.repository.ReservationRepository;
 import com.kyk.HotSpace.seat.domain.dto.SeatDTO;
@@ -11,6 +11,8 @@ import com.kyk.HotSpace.store.domain.entity.Store;
 import com.kyk.HotSpace.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,12 +81,11 @@ public class SeatServiceImpl implements SeatService {
     @Override
     public SeatStatistics statisticsResult(Long storeId) {
         List<Seat> seats = seatRepository.findByStoreId(storeId);
-        List<Reservation> reservations = reservationRepository.findByStore_Id(storeId);
-
+        Page<Reservation> reservations = reservationRepository.findByStoreIdAndApprovalState(Pageable.unpaged(), storeId, ApprovalState.STAND);
 
         int totalCount = seats.size();
         int usingCount = seatRepository.countByAvailableFalse();
-        int reservationCount = reservations.size();
+        int reservationCount = reservations.getSize();
         int remainingCount = totalCount - usingCount - reservationCount;
 
         return new SeatStatistics(totalCount, usingCount, reservationCount, remainingCount);
