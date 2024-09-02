@@ -33,7 +33,7 @@
 
       <li class="nav-item"
           th:if="${session.loginMember != null}">
-        <a th:href="@{/stores/storeList}" class="nav-link text-white">
+        <a th:href="@{/stores/list}" class="nav-link text-white">
           <img src="/img/main/store_setting_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
           가게 관리
         </a>
@@ -43,7 +43,7 @@
           th:if="${session.loginMember != null}">
         <a th:href="@{/reservations/list}" class="nav-link text-white">
           <img src="/img/main/reservation_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
-          예약 현황
+          예약 내역
         </a>
       </li>
     </ul>

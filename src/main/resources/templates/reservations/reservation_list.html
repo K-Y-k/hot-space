@@ -38,7 +38,7 @@
 
             <li class="nav-item"
                 th:if="${session.loginMember != null}">
-                <a th:href="@{/stores/storeList}" class="nav-link text-white">
+                <a th:href="@{/stores/list}" class="nav-link text-white">
                     <img src="/img/main/store_setting_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
                     가게 관리
                 </a>
@@ -121,9 +121,16 @@
                         th:if="${reservation.approvalState.title == '거절'}"
                         th:text="'승인거절'"></td>
 
-                    <td class="col-md-2">
+                    <td class="col-md-2"
+                        th:if="${reservation.approvalState.title == '대기' || reservation.approvalState.title == '승인'}">
                         <a th:href="@{/reservations/{reservationId}/delete(reservationId=${reservation.id})}" class="flex-grow-1 mx-1">
                             <button type="button" class="btn btn-primary w-100">취소</button>
+                        </a>
+                    </td>
+                    <td class="col-md-2"
+                        th:if="${reservation.approvalState.title == '거절'}">
+                        <a th:href="@{/reservations/{reservationId}/delete(reservationId=${reservation.id})}" class="flex-grow-1 mx-1">
+                            <button type="button" class="btn btn-primary w-100">삭제</button>
                         </a>
                     </td>
                 </tr>
