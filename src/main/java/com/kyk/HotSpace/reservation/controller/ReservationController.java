@@ -51,8 +51,8 @@ public class ReservationController {
 
         reservationService.saveReservation(form, convertDateTime, loginMember.getId(), storeId);
 
-        model.addAttribute("message", "예약 되었습니다!");
-        model.addAttribute("redirectUrl", "/");
+        model.addAttribute("message", "예약이 신청되었습니다!\n예약 내역에서 승인 처리되어야 예약이 확정됩니다.\n확인한 후 방문해 주세요!");
+        model.addAttribute("redirectUrl", "/reservations/list");
         return "messages";
     }
 

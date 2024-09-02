@@ -73,7 +73,7 @@ function searchCoordinateToAddress(latlng) {
         addrType = item.name === 'roadaddr' ? '[도로명 주소]' : '';
 
         var contentString = [
-            '<div class="info_inner">',
+            '<div class="info_inner" style="text-align: center;">',
             '   <h3>선택한 위치</h3>',
             '   <p>' + address + '</p>',
             '</div>'

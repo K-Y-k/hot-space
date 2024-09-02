@@ -46,7 +46,8 @@ $(document).ready(function() {
 
                 // 좌석 클릭 이벤트
                 seatElement.addEventListener('click', function(event) {
-                    if (!event.target.classList.contains('noAvailable')) {
+                    // 사용/예약 테이블이 아니라면
+                    if (!event.target.classList.contains('noAvailable') && !event.target.classList.contains('keeping')) {
                         // 선택한 좌석 ID를 숨겨진 입력 필드에 설정
                         document.getElementById('seatIdInput').value = event.target.getAttribute('data-seatId');
 
