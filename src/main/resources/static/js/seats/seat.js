@@ -108,7 +108,7 @@ function saveSeatArrangement() {
         dataType: 'json',
         success: function(uploadResult) {
             alert('저장되었습니다.');
-            window.location.href = '/stores/storeList';
+            window.location.href = '/stores/list';
         },
         error: function (status, error) {
             console.log("오류", status, error);

@@ -40,7 +40,7 @@
                 th:if="${session.loginMember != null}">
                 <a th:href="@{/reservations/list}" class="nav-link text-white">
                     <img src="/img/main/reservation_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
-                    예약 현황
+                    예약 내역
                 </a>
             </li>
         </ul>
@@ -109,13 +109,13 @@
 
                     <td class="col-md-2">
                         <a th:href="@{/seats/{storeId}/setting(storeId=${store.id})}" class="flex-grow-1 mx-1">
-                            <button type="button" class="btn btn-primary w-100">좌석 배치</button>
+                            <button type="button" class="btn btn-primary w-100">테이블 배치</button>
                         </a>
                     </td>
 
                     <td class="col-md-2">
                         <a th:href="@{/seats/{storeId}/state(storeId=${store.id})}" class="flex-grow-1 mx-1">
-                            <button type="button" class="btn btn-primary w-100">좌석 현황</button>
+                            <button type="button" class="btn btn-primary w-100">테이블 현황</button>
                         </a>
                     </td>
 
@@ -132,13 +132,13 @@
         <nav class="page-nav">
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${!hasPrev} ? 'disabled'">
-                    <a class="page-link" th:href="@{/stores/storeList(page=${previous})}">이전</a>
+                    <a class="page-link" th:href="@{/stores/list(page=${previous})}">이전</a>
                 </li>
 
                 <li class="page-item" th:each="page : ${#numbers.sequence(startPage, endPage)}">
                     <a class="page-link"
                        th:if="${page != nowPage} and ${page != 0}"
-                       th:href="@{/stores/storeList(page = ${page - 1})}"
+                       th:href="@{/stores/list(page = ${page - 1})}"
                        th:text="${page}"></a>
 
                     <strong class="page-link"
@@ -148,7 +148,7 @@
 
 
                 <li class="page-item" th:classappend="${!hasNext} ? 'disabled'">
-                    <a class="page-link" th:href="@{/stores/storeList(page=${next})}">다음</a>
+                    <a class="page-link" th:href="@{/stores/list(page=${next})}">다음</a>
                 </li>
             </ul>
         </nav>

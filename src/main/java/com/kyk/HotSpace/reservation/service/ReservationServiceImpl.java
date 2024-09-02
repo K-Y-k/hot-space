@@ -72,6 +72,14 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public void deleteReservation(Long reservationId) {
+        Reservation findReservation = reservationRepository.findById(reservationId).orElseThrow(() ->
+                new IllegalArgumentException("예약 가져오기 실패: 예약을 찾지 못했습니다." + reservationId));
+
+        // 승인되어 이용좌석이 사용중으로 변경된 상황에서 고객이 삭제한 경우
+        if (findReservation.getApprovalState() == ApprovalState.APPROVE && !findReservation.getSeat().isAvailable()) {
+            findReservation.getSeat().changeAvailable();
+        }
+
         reservationRepository.delete(reservationId);
     }
 
@@ -85,7 +93,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public void cancelReservation(Long seatId) {
-        Optional<Reservation> findReservation = Optional.of(reservationRepository.findBySeatIdAndApprovalState(seatId, ApprovalState.STAND).get());
+        Optional<Reservation> findReservation = reservationRepository.findBySeatIdAndApprovalState(seatId, ApprovalState.STAND);
         findReservation.ifPresent(reservation -> reservation.changeApprovalState(ApprovalState.REJECT));
     }
 

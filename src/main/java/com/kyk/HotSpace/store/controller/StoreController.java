@@ -49,7 +49,8 @@ public class StoreController {
 
     @PostMapping("/upload")
     public String storeUpload(@SessionAttribute(LoginSessionConst.LOGIN_MEMBER) MemberDTO loginMember,
-                              @Valid @ModelAttribute("uploadForm") StoreUploadForm form, BindingResult bindingResult) throws IOException {
+                              @Valid @ModelAttribute("uploadForm") StoreUploadForm form, BindingResult bindingResult,
+                              Model model) throws IOException {
         log.info("가게 이름 = {}", form.getName());
         log.info("가게 연락처 = {}", form.getNumber());
         log.info("가게 url = {}", form.getSiteUrl());
@@ -62,7 +63,10 @@ public class StoreController {
         }
 
         storeService.saveStore(loginMember.getId(), form);
-        return "redirect:/";
+
+        model.addAttribute("message", "등록 되었습니다!");
+        model.addAttribute("redirectUrl", "/stores/list");
+        return "messages";
     }
 
     @GetMapping("{storeId}/update")
@@ -128,7 +132,7 @@ public class StoreController {
         storeService.changeStore(storeId, form);
 
         model.addAttribute("message", "수정 되었습니다.");
-        model.addAttribute("redirectUrl", "/stores/storeList");
+        model.addAttribute("redirectUrl", "/stores/list");
         return "messages";
     }
 
@@ -138,12 +142,12 @@ public class StoreController {
         storeService.deleteStore(storeId);
 
         model.addAttribute("message", "삭제 되었습니다!");
-        model.addAttribute("redirectUrl", "/stores/storeList");
+        model.addAttribute("redirectUrl", "/stores/list");
         return "messages";
     }
 
 
-    @GetMapping("/storeList")
+    @GetMapping("/list")
     public String storeList(@SessionAttribute(name = LoginSessionConst.LOGIN_MEMBER, required = false) MemberDTO loginMember,
                             @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                             Model model) {
