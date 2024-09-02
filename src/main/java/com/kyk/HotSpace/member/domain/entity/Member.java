@@ -1,6 +1,7 @@
 package com.kyk.HotSpace.member.domain.entity;
 
 import com.kyk.HotSpace.file.domain.ProfileFile;
+import com.kyk.HotSpace.reservation.domain.entity.Reservation;
 import com.kyk.HotSpace.store.domain.entity.Store;
 import com.kyk.HotSpace.web.BaseTimeEntity;
 import lombok.*;
@@ -37,6 +38,9 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Store> stores = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Reservation> reservations;
 
     public Member(String name, String loginId, String password, Role role) {
         this.name = name;

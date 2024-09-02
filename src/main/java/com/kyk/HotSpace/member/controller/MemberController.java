@@ -1,10 +1,7 @@
 package com.kyk.HotSpace.member.controller;
 
 import com.kyk.HotSpace.member.domain.LoginSessionConst;
-import com.kyk.HotSpace.member.domain.dto.JoinForm;
-import com.kyk.HotSpace.member.domain.dto.LoginForm;
-import com.kyk.HotSpace.member.domain.dto.MemberDTO;
-import com.kyk.HotSpace.member.domain.dto.UpdateForm;
+import com.kyk.HotSpace.member.domain.dto.*;
 import com.kyk.HotSpace.member.service.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -158,15 +155,16 @@ public class MemberController {
         log.info("받아온 이름 = {}", form.getName());
         log.info("받아온 비밀번호 = {}", form.getPassword());
 
+        // DB 변경 감지 + loginMember 객체 필드 재설정
         memberService.changeProfile(loginMember, form);
 
         // 프로필 사진 갱신을 위해 로그아웃
         HttpSession session = request.getSession(false);
-        if (session != null) { 
+        if (session != null) {
             session.invalidate();
             log.info("로그아웃 완료");
         }
-        
+
         // 다시 로그인 처리
         HttpSession newSession = request.getSession();
         newSession.setAttribute(LoginSessionConst.LOGIN_MEMBER, loginMember);

@@ -38,6 +38,14 @@
           가게 관리
         </a>
       </li>
+
+      <li class="nav-item"
+          th:if="${session.loginMember != null}">
+        <a th:href="@{/reservations/list}" class="nav-link text-white">
+          <img src="/img/main/reservation_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
+          예약 현황
+        </a>
+      </li>
     </ul>
 
     <hr>
@@ -165,7 +173,7 @@
         crossorigin="anonymous">
 </script>
 
-<script src="/js/storeUpload.js"></script>
-<script src="/js/address.js"></script>
+<script src="/js/stores/storeUpload.js"></script>
+<script src="/js/api/address.js"></script>
 
 </html>

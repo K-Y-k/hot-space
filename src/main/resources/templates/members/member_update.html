@@ -45,10 +45,10 @@
       </li>
 
       <li class="nav-item"
-          th:if="${session.loginMember == null}">
-        <a th:href="@{/members/login}" class="nav-link text-white">
-          <img src="/img/main/login_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
-          로그인
+          th:if="${session.loginMember != null}">
+        <a th:href="@{/reservations/list}" class="nav-link text-white">
+          <img src="/img/main/reservation_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
+          예약 현황
         </a>
       </li>
     </ul>
@@ -159,7 +159,7 @@
         crossorigin="anonymous">
 </script>
 
-<script src="/js/profile.js"></script>
+<script src="/js/members/profile.js"></script>
 
 </body>
 </html>

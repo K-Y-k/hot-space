@@ -8,5 +8,6 @@ import lombok.Data;
 public class SeatStatistics {
     private int totalCount;
     private int usingCount;
+    private int reservationCount;
     private int remainingCount;
 }

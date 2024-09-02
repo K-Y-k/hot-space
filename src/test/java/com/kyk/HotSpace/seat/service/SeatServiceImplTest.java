@@ -30,7 +30,7 @@ public class SeatServiceImplTest {
     @BeforeEach
     void setUp() {
         // 공통으로 사용하는 Store 객체를 생성하고 저장
-        Store store = new Store(null, "편의점", "ec편의점", "유성구~~대로", "010-0200-0200", "www.dasd.com", 40.2, 33.5, null, null, null);
+        Store store = new Store(null, "편의점", "ec편의점", "유성구~~대로", "010-0200-0200", "www.dasd.com", 40.2, 33.5, null, null, null, null);
         savedStore = storeRepository.save(store);
     }
 
@@ -45,7 +45,7 @@ public class SeatServiceImplTest {
     @DisplayName("등록한 가게에 배치한 좌석 저장")
     void saveSeat() {
         // given
-        Seat seat1 = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+        Seat seat1 = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore, null);
 
         // when
         Seat savedSeat = seatRepository.saveSeat(seat1);
@@ -58,7 +58,7 @@ public class SeatServiceImplTest {
     @DisplayName("등록한 가게에 좌석들 중 좌석 id로 찾기")
     void findById() {
         // given
-        Seat seat1 = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+        Seat seat1 = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore, null);
         Seat savedSeat = seatRepository.saveSeat(seat1);
 
         // when
@@ -73,7 +73,7 @@ public class SeatServiceImplTest {
     void findFirstSeatByStoreId() {
         // given
         for (int i = 0; i < 3; i++) {
-            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore, null);
             seatRepository.saveSeat(newSeat);
         }
 
@@ -89,7 +89,7 @@ public class SeatServiceImplTest {
     void findSeatsByStoreId() {
         // given
         for (int i = 0; i < 3; i++) {
-            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore, null);
             seatRepository.saveSeat(newSeat);
         }
 
@@ -104,11 +104,11 @@ public class SeatServiceImplTest {
     @DisplayName("storeId에 해당하는 좌석 데이터 모두 삭제")
     void deleteAllByStoreId() {
         // given
-        Store store = new Store(null, "편의점", "ec편의점", "유성구~~대로", "010-0200-0200", "www.dasd.com", 40.2, 33.5, null, null, null);
+        Store store = new Store(null, "편의점", "ec편의점", "유성구~~대로", "010-0200-0200", "www.dasd.com", 40.2, 33.5, null, null, null, null);
         Store savedStore = storeRepository.save(store);
 
         for (int i = 0; i < 3; i++) {
-            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore, null);
             seatRepository.saveSeat(newSeat);
         }
 
@@ -125,12 +125,12 @@ public class SeatServiceImplTest {
     void statistics() {
         // given
         for (int i = 0; i < 7; i++) {
-            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore);
+            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, true, savedStore, null);
             seatRepository.saveSeat(newSeat);
         }
 
         for (int i = 0; i < 3; i++) {
-            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, false, savedStore);
+            Seat newSeat = new Seat(null, "small", 1, 214.2, 531.3, false, savedStore, null);
             seatRepository.saveSeat(newSeat);
         }
 
