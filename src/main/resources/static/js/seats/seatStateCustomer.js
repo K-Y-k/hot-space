@@ -12,10 +12,14 @@ $(document).ready(function() {
                 var seatElement = document.createElement('div');
                 seatElement.classList.add('seat');
 
-                // 이용상태에 따른 클래스 설정
-                if (seat.available === false) {
+                 // 이용상태에 따른 클래스 설정
+                 if (seat.available === false) {
+                    // 예약이 없고 사용 불가능한 경우
                     seatElement.classList.add('noAvailable');
-                }
+                 } else if (seat.reservationDTO && seat.reservationDTO.approvalState === '대기') {
+                    // 예약이 있고, 승인되지 않은 경우
+                    seatElement.classList.add('keeping');
+                 }
 
                 // seatType에 맞는 클래스 설정
                 if (seat.seatType === 'small') {
@@ -43,6 +47,9 @@ $(document).ready(function() {
                 // 좌석 클릭 이벤트
                 seatElement.addEventListener('click', function(event) {
                     if (!event.target.classList.contains('noAvailable')) {
+                        // 선택한 좌석 ID를 숨겨진 입력 필드에 설정
+                        document.getElementById('seatIdInput').value = event.target.getAttribute('data-seatId');
+
                         // 예약 창 띄우기
                         $('#reservationModal').modal('show');
                     }

@@ -1,8 +1,6 @@
 package com.kyk.HotSpace.seat.domain.dto;
 
-import com.kyk.HotSpace.member.domain.entity.Member;
-import com.kyk.HotSpace.seat.domain.entity.Seat;
-import com.kyk.HotSpace.store.domain.entity.Store;
+import com.kyk.HotSpace.reservation.domain.dto.ReservationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,4 +13,5 @@ public class SeatDTO {
     private double posY;
     private boolean available;
     private int tableCapacity;
+    ReservationDTO reservationDTO;
 }

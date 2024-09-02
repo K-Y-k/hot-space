@@ -27,6 +27,13 @@
         </div>
 
         <div class="statistics-element">
+          <h4>예약 테이블: </h4>
+
+          <div class="seat small keeping"></div>
+          <h4 th:text="${reservationCount}" style="font-weight: bold;"></h4>
+        </div>
+
+        <div class="statistics-element">
           <h4>잔여 테이블: </h4>
 
           <div class="seat small"></div>
@@ -39,6 +46,80 @@
       <div class="seat-container">
         <!-- 좌석 배치 영역 -->
       </div>
+    </div>
+
+
+    <!--예약 대기자 페이지-->
+    <div class="reservation-container">
+        <!--테이블-->
+        <table class="table">
+          <thead class="table-dark">
+          <tr>
+              <th class="col-md-2" style="text-align: center; margin: 0 auto;">예약자</th>
+              <th class="col-md-2" style="text-align: center; margin: 0 auto;">연락처</th>
+              <th class="col-md-2" style="text-align: center; margin: 0 auto;">예약시간</th>
+              <th class="col-md-2" style="text-align: center; margin: 0 auto;">참석인원</th>
+              <th class="col-md-2" style="text-align: center; margin: 0 auto;"></th>
+              <th class="col-md-2" style="text-align: center; margin: 0 auto;"></th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr th:each="reservation : ${reservations}">
+              <td class="col-md-2" style="text-align: center; margin: 0 auto;"
+                  th:text="${reservation.name}"></td>
+              </td>
+
+              <td class="col-md-2" style="text-align: center; margin: 0 auto;"
+                  th:text="${reservation.phoneNum}"></td>
+              </td>
+
+              <td class="col-md-2"
+                  style="text-align: center; margin: 0 auto;"
+                  th:text="${#temporals.format(reservation.dateTime, 'MM/dd HH:mm')}"></td>
+
+              <td class="col-md-2" style="text-align: center; margin: 0 auto;"
+                  th:text="${reservation.guestCount}"></td>
+              </td>
+
+              <td class="col-md-2">
+                  <a th:href="@{/reservations/{storeId}/{reservationId}/approve(state='YES', storeId=${storeId}, reservationId=${reservation.id})}" class="flex-grow-1 mx-1">
+                      <button type="button" class="btn btn-primary w-100">승인</button>
+                  </a>
+              </td>
+
+              <td class="col-md-2">
+                  <a th:href="@{/reservations/{storeId}/{reservationId}/approve/(state='NO', storeId=${storeId}, reservationId=${reservation.id})}" class="flex-grow-1 mx-1">
+                      <button type="button" class="btn btn-primary w-100">취소</button>
+                  </a>
+              </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <!--페이지-->
+        <nav class="page-nav">
+          <ul class="pagination justify-content-center">
+              <li class="page-item" th:classappend="${!hasPrev} ? 'disabled'">
+                  <a class="page-link" th:href="@{/seats/{storeId}/state(storeId=${storeId}, page=${previous})}">이전</a>
+              </li>
+
+              <li class="page-item" th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                  <a class="page-link"
+                     th:if="${page != nowPage} and ${page != 0}"
+                     th:href="@{/seats/{storeId}/state(storeId=${storeId}, page = ${page - 1})}"
+                     th:text="${page}"></a>
+
+                  <strong class="page-link"
+                          th:if="${page == nowPage}"
+                          th:text="${page}" style="color: red;"></strong>
+              </li>
+
+              <li class="page-item" th:classappend="${!hasNext} ? 'disabled'">
+                  <a class="page-link" th:href="@{//seats/{storeId}/state(storeId=${storeId}, page=${next})}">다음</a>
+              </li>
+          </ul>
+        </nav>
     </div>
 
     <div class="button-box">

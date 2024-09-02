@@ -1,5 +1,6 @@
 package com.kyk.HotSpace.seat.domain.entity;
 
+import com.kyk.HotSpace.reservation.domain.entity.Reservation;
 import com.kyk.HotSpace.seat.domain.dto.SeatDTO;
 import com.kyk.HotSpace.store.domain.entity.Store;
 import com.kyk.HotSpace.web.BaseTimeEntity;
@@ -36,6 +37,8 @@ public class Seat extends BaseTimeEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
+    @OneToOne(mappedBy = "seat", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Reservation reservation;
 
     // 변경감지 메서드
     public void changeAvailable() {

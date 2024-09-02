@@ -2,6 +2,7 @@ package com.kyk.HotSpace.store.domain.entity;
 
 import com.kyk.HotSpace.file.domain.StoreFile;
 import com.kyk.HotSpace.member.domain.entity.Member;
+import com.kyk.HotSpace.reservation.domain.entity.Reservation;
 import com.kyk.HotSpace.seat.domain.entity.Seat;
 import com.kyk.HotSpace.store.domain.dto.StoreUpdateForm;
 import com.kyk.HotSpace.web.BaseTimeEntity;
@@ -49,6 +50,9 @@ public class Store extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Seat> seats = new ArrayList<>();
+
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Reservation> reservations = new ArrayList<>();
 
 
     // 변경 감지 메서드
