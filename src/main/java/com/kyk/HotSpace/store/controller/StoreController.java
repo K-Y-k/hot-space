@@ -129,6 +129,13 @@ public class StoreController {
             return "stores/store_update";
         }
 
+        log.info("수정 가게 이름 = {}", form.getName());
+        log.info("수정 가게 연락처 = {}", form.getNumber());
+        log.info("수정 가게 url = {}", form.getSiteUrl());
+        log.info("수정 가게 좌표 = {}, {}", form.getLatitude(), form.getLongitude());
+        log.info("수정 가게 주소 = {}", form.getAddress());
+        log.info("수정 가게 이미지 파일 = {}", form.getImageFiles().get(0).getOriginalFilename());
+
         storeService.changeStore(storeId, form);
 
         model.addAttribute("message", "수정 되었습니다.");

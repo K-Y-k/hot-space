@@ -58,11 +58,6 @@ function initMap() {
                 searchCoordinateToAddress(e.coord);
             });
 
-            // 맵 클릭시 해당 위치의 정보
-            map.addListener('click', function(e) {
-                searchCoordinateToAddress(e.coord);
-            });
-
             // 지도 이동시 이벤트 리스너
             naver.maps.Event.addListener(map, 'center_changed', function() {
                 if (debounceTimer) {

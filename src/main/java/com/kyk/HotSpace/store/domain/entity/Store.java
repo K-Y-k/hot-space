@@ -59,7 +59,7 @@ public class Store extends BaseTimeEntity {
     public void changeStore(StoreUpdateForm form) {
         this.category = form.getCategory();
         this.name = form.getName();
-        this.address = form.getName();
+        this.address = form.getAddress();
         this.number = form.getNumber();
         this.siteUrl = form.getSiteUrl();
         this.latitude = form.getLatitude();
