@@ -11,8 +11,8 @@ function fetchMarkers(center_lat, center_lng) {
         dataType: "json",
         data: {center_lat, center_lng, radius, category},
         success: function(result) {
-            // 기존 마커를 모두 제거
-            clearMarkers();
+            // 기존 마커, InfoWindow 모두 제거
+            clearMarkersAndInfo();
 
             console.log(JSON.stringify(result))
 
@@ -23,7 +23,24 @@ function fetchMarkers(center_lat, center_lng) {
                     map: map
                 });
 
-                markersArray.push(findStoreMarker);
+                // 가게 이름 InfoWindow 생성
+                var markerInfoWindow = new naver.maps.InfoWindow({
+                    content: '<div style="text-align: center; padding: 5px; font-size: 12px;">' + markerData.name + '</div>',
+                    backgroundColor: "white",
+                    borderColor: "black",
+                    borderWidth: 1,
+                    anchorSize: new naver.maps.Size(20, 20),
+                    anchorSkew: true,
+                    pixelOffset: new naver.maps.Point(0, -10)
+                });
+
+                // 마커에 커서를 올리면 가게 이름 InfoWindow 출력
+                naver.maps.Event.addListener(findStoreMarker, 'mouseover', function() {
+                    markerInfoWindow.open(map, findStoreMarker);
+                });
+
+                // 마커와 InfoWindow를 관리하는 배열에 저장
+                markersArray.push({ marker: findStoreMarker, infoWindow: markerInfoWindow });
 
                 // 생성한 마커 클릭 이벤트 핸들러: 클릭한 가게의 정보 출력
                 naver.maps.Event.addListener(findStoreMarker, 'click', function() {
@@ -115,10 +132,11 @@ function fetchMarkers(center_lat, center_lng) {
 }
 
 // 기존 마커를 모두 제거하는 함수
-function clearMarkers() {
-    // 넣어둔 마커 객체를 모두 조회하며 초기화
-    markersArray.forEach(function(marker) {
-        marker.setMap(null);
+function clearMarkersAndInfo() {
+    // 넣어둔 마커, InfoWindow 객체를 모두 조회하며 초기화
+    markersArray.forEach(function(item) {
+        item.marker.setMap(null); // 마커 제거
+        item.infoWindow.close();  // InfoWindow 닫기
     });
 
     // 마커를 담는 배열도 초기화

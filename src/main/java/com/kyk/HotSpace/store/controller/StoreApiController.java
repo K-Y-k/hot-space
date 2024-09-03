@@ -62,7 +62,7 @@ public class StoreApiController {
 
         // 필요한 API 스펙에 맞춘 DTO 리스트로 변환
         List<StoreDTO> findStoresDTOList = findStores.stream()
-                .map(m -> new StoreDTO(m.getId(), m.getLatitude(), m.getLongitude()))
+                .map(m -> new StoreDTO(m.getId(), m.getName(), m.getLatitude(), m.getLongitude()))
                 .collect(Collectors.toList());
 
         for (StoreDTO storeDTO : findStoresDTOList) {
