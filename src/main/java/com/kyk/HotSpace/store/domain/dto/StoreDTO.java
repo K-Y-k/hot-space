@@ -22,8 +22,9 @@ public class StoreDTO {
     private List<String> imageFileName;
 
 
-    public StoreDTO(long id, double latitude, double longitude) {
+    public StoreDTO(long id, String name, double latitude, double longitude) {
         this.id = id;
+        this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
     }
