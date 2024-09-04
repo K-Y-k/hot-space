@@ -20,6 +20,7 @@ public class StoreDTO {
     private double latitude;
     private double longitude;
     private List<String> imageFileName;
+    private Long CEO_Id;
 
 
     public StoreDTO(long id, String name, double latitude, double longitude) {

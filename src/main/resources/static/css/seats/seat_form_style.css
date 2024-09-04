@@ -77,11 +77,16 @@ main {
     justify-content: between;
 }
 
-
 .field-error {
     border: 1px solid red;
 }
 .error-sign {
     color: red;
     font-size: 0.8rem;
+}
+
+/* 호버 시 색상 변경 */
+.nav-link.hovered {
+    color: #79aef7;
+    font-weight: bold;
 }

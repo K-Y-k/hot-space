@@ -29,11 +29,7 @@ public class StoreApiController {
     public ResponseEntity<?> storeDetail(Long storeId) {
         log.info("클릭한 가게 id = {}", storeId);
 
-        Store findStore = storeService.findById(storeId).orElseThrow(() ->
-                new IllegalArgumentException("가져오기 실패: 가게를 찾지 못했습니다." + storeId));
-
-
-        StoreDTO findStoreDTO = new StoreDTO(findStore);
+        StoreDTO findStoreDTO = storeService.findById(storeId);
 
         return new ResponseEntity<>(findStoreDTO, HttpStatus.OK);
     }
@@ -54,7 +50,7 @@ public class StoreApiController {
         List<Store> findStores;
 
         if (category.isBlank()) {
-            // 현재 중심 좌표 반경 500m에 등록된 가게 찾기
+            // 카테고리가 비어있으면 전체 카테고리로 현재 중심 좌표 반경 500m에 가게 조회
             findStores = storeService.findMarkersWithinRadius(center_lat, center_lng, radiusIn);
         } else {
             findStores = storeService.findMarkersWithinRadiusByCategory(center_lat, center_lng, radiusIn, category);

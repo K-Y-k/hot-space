@@ -12,13 +12,6 @@ main {
     height: 100vh;
 }
 
-.page-nav {
-    position: absolute;
-    top: 75%;
-    left: 30%;
-    height: 10%;
-}
-
 .table {
     position: absolute;
     top: 10%;
@@ -27,9 +20,14 @@ main {
     width: 60%;
     height: 50%;
 }
+.page-nav {
+    position: absolute;
+    top: 75%;
+    left: 30%;
+    height: 10%;
+}
 
-
- /* 호버 시 변경 */
+/* 호버 시 색상 변경 */
 .nav-link.hovered {
     color: #79aef7;
     font-weight: bold;

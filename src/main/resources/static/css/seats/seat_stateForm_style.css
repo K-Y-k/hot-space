@@ -33,7 +33,6 @@ main {
      text-align: center;
 }
 
-
 .seat {
     border: 1px solid #000;
     text-align: center;
@@ -52,7 +51,6 @@ main {
     width: 700px;
     height: 500px;
 }
-
 
 /* 좌석 크기별 스타일 */
 .seat.small {
@@ -83,11 +81,16 @@ main {
     justify-content: between;
 }
 
-
 .quantity-selector {
     display: flex;
 }
 .quantity-selector input {
     text-align: center;
     width: 20%;
+}
+
+/* 호버 시 색상 변경 */
+.nav-link.hovered {
+    color: #79aef7;
+    font-weight: bold;
 }

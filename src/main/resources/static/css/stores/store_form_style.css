@@ -35,7 +35,6 @@ main {
     height: 50%;
 }
 
-
 .container {
     position: absolute;
     top: 3%;
@@ -51,4 +50,10 @@ main {
 .error-sign {
     color: red;
     font-size: 0.8rem;
+}
+
+/* 호버 시 색상 변경 */
+.nav-link.hovered {
+    color: #79aef7;
+    font-weight: bold;
 }

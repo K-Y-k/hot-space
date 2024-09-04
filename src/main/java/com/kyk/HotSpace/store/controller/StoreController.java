@@ -2,6 +2,7 @@ package com.kyk.HotSpace.store.controller;
 
 import com.kyk.HotSpace.member.domain.LoginSessionConst;
 import com.kyk.HotSpace.member.domain.dto.MemberDTO;
+import com.kyk.HotSpace.store.domain.dto.StoreDTO;
 import com.kyk.HotSpace.store.domain.dto.StoreUpdateForm;
 import com.kyk.HotSpace.store.domain.dto.StoreUploadForm;
 import com.kyk.HotSpace.store.domain.entity.Store;
@@ -17,12 +18,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Objects;
-import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -82,11 +80,10 @@ public class StoreController {
             return "messages";
         }
 
-        Store findStore = storeService.findById(storeId).orElseThrow(() ->
-                new IllegalArgumentException("가져오기 실패: 가게를 찾지 못했습니다." + storeId));
-        
+        StoreDTO findStore = storeService.findById(storeId);
+
         // 본인 가게인지 검증
-        if (!Objects.equals(findStore.getMember().getId(), loginMember.getId())) {
+        if (!Objects.equals(findStore.getCEO_Id(), loginMember.getId())) {
             model.addAttribute("message", "본인 가게가 아닙니다.");
             model.addAttribute("redirectUrl", "/");
             return "messages";

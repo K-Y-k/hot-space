@@ -6,6 +6,7 @@ import com.kyk.HotSpace.file.repository.store.StoreFileRepository;
 import com.kyk.HotSpace.member.domain.entity.Member;
 import com.kyk.HotSpace.member.domain.entity.Role;
 import com.kyk.HotSpace.member.repository.MemberRepository;
+import com.kyk.HotSpace.store.domain.dto.StoreDTO;
 import com.kyk.HotSpace.store.domain.dto.StoreUpdateForm;
 import com.kyk.HotSpace.store.domain.dto.StoreUploadForm;
 import com.kyk.HotSpace.store.domain.entity.Store;
@@ -25,8 +26,8 @@ import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -45,8 +46,21 @@ public class StoreServiceImpl implements StoreService {
 
 
     @Override
-    public Optional<Store> findById(Long id) {
-        return storeRepository.findById(id);
+    public StoreDTO findById(Long storeId) {
+        // 가게 id의 엔티티 조회
+        Store findStore = storeRepository.findById(storeId).orElseThrow(() ->
+                new IllegalArgumentException("가져오기 실패: 가게를 찾지 못했습니다." + storeId));
+
+        // 가게 id의 파일 조회
+        List<StoreFile> findStoreFileList = storeFileRepository.findByStoreId(storeId);
+
+        // DTO 스펙에 맞게 물리 경로 파일이름을 리스트로 담기
+        List<String> imageFiles = new ArrayList<>();
+        for (StoreFile storeFile : findStoreFileList) {
+            imageFiles.add(storeFile.getStoredFileName());
+        }
+
+        return new StoreDTO(findStore.getId(), findStore.getCategory(), findStore.getName(), findStore.getAddress(), findStore.getNumber(), findStore.getSiteUrl(), findStore.getLatitude(), findStore.getLongitude(), imageFiles, findStore.getMember().getId());
     }
 
     @Override

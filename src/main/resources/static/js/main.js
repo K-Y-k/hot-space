@@ -25,12 +25,6 @@ function initMap() {
                 center: position,
                 zoom: 17
             });
-
-            // 현재 중심 좌표
-            var center = map.getCenter();
-            center_lat = center.lat();
-            center_lng = center.lng();
-
             map.setCursor('pointer') // 커서 손가락 모양으로 적용
 
             // 현재 위치의 마커 생성
@@ -38,19 +32,23 @@ function initMap() {
                 position: position,
                 map: map,
                 icon: {
-                    url: "/img/main/marker.png",
-                    scaledSize: new naver.maps.Size(40, 40),
-                    origin: new naver.maps.Point(0, 0),
-                    anchor: new naver.maps.Point(35, 85)
+                    url: "/img/main/marker.png",              // 이미지 파일 경로
+                    scaledSize: new naver.maps.Size(30, 40),  // 크기
+                    origin: new naver.maps.Point(0, 0),       // 마커의 기준점(이미지의 원점)
+                    anchor: new naver.maps.Point(35, 85)      // 아이콘의 앵커(마커의 위치를 기준으로 할 점)
                 }
             });
+
+            // 현재 중심 좌표
+            var center = map.getCenter();
+            center_lat = center.lat();
+            center_lng = center.lng();
 
             // 현재 중심 반경 500m내에 등록된 가게 있는지 확인
             fetchMarkers(current_lat, current_lng)
 
             // 전역 infowindow 객체 초기화
             infoWindow = new naver.maps.InfoWindow({
-                anchorSkew: true
             });
 
             // 마커 클릭 이벤트 리스너 설정
@@ -82,7 +80,7 @@ function initMap() {
         console.error('Geolocation는 이 브라우저에 지원하지 않습니다.');
     }
 }
-
+// 자바스크립트 파일이 로드된 후 initMap이라는 함수를 실행
 naver.maps.onJSContentLoaded = initMap;
 
 
@@ -98,18 +96,4 @@ $(document).ready(function() {
 // 시설 종류가 선택되었을 때의 이벤트
 document.getElementById('category').addEventListener('change', function(event) {
     fetchMarkers(center_lat, center_lng)
-});
-
-
-// 마우스 가리킬시 이벤트
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('mouseover', function() {
-        this.classList.remove('text-white');
-        this.classList.add('hovered');
-    });
-
-    link.addEventListener('mouseout', function() {
-        this.classList.remove('hovered');
-        this.classList.add('text-white');
-    });
 });

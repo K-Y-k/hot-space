@@ -13,8 +13,7 @@ function searchAddress() {
         map.setCenter(coord);      // 지도 중심을 검색된 좌표로 이동
         map.setZoom(17);
 
-        marker.setPosition(coord); // 마커를 해당 위치로 이동
-        marker.setMap(map);        // 마커를 지도에 표시
+        marker.setMap(null);       // 이전 현재 위치를 생성했던 마커를 제거
     });
 }
 

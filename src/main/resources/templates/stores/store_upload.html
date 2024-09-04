@@ -14,166 +14,166 @@
 </head>
 
 <body>
-<div class="flex-background">
-  <nav class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-      <img src="/img/main/fire.png" style="width: 40px; height: 40px;" class="bi pe-none me-2"/>
-      <span style="font-size: 1.5rem;">HotSpace</span>
-    </a>
-
-    <hr>
-
-    <ul class="nav nav-pills flex-column mb-auto" style="font-size: 1.0rem;">
-      <li class="nav-item">
-        <a href="/" class="nav-link text-white" style="font-size: 1.1rem;">
-          <img src="/img/main/home_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
-          Home
-        </a>
-      </li>
-
-      <li class="nav-item"
-          th:if="${session.loginMember != null}">
-        <a th:href="@{/stores/list}" class="nav-link text-white">
-          <img src="/img/main/store_setting_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
-          가게 관리
-        </a>
-      </li>
-
-      <li class="nav-item"
-          th:if="${session.loginMember != null}">
-        <a th:href="@{/reservations/list}" class="nav-link text-white">
-          <img src="/img/main/reservation_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
-          예약 내역
-        </a>
-      </li>
-    </ul>
-
-    <hr>
-
-    <div th:if="${session.loginMember != null}" class="dropdown">
-      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        <img th:if="${session.loginMember.storedFileName == 'default_icon.PNG'}"
-             src="/img/main/user_icon.png"
-             width="32" height="32" class="rounded-circle me-2">
-
-        <img th:if="${session.loginMember.storedFileName != 'default_icon.PNG'}"
-             th:src="@{|/profileImageUpload/${session.loginMember.storedFileName}|}"
-             width="32" height="32" class="rounded-circle me-2">
-
-        <strong th:text="${session.loginMember.name}" style="font-size: 1.0rem;"></strong>
+  <div class="flex-background">
+    <nav class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        <img src="/img/main/fire.png" style="width: 40px; height: 40px;" class="bi pe-none me-2"/>
+        <span style="font-size: 1.5rem;">HotSpace</span>
       </a>
 
-      <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-        <li><a class="dropdown-item" th:href="@{/members/{memberId}/delete(memberId=${session.loginMember.id})}">회원탈퇴</a></li>
+      <hr>
 
-        <li><hr class="dropdown-divider"></li>
+      <ul class="nav nav-pills flex-column mb-auto" style="font-size: 1.0rem;">
+        <li class="nav-item">
+          <a href="/" class="nav-link text-white" style="font-size: 1.1rem;">
+            <img src="/img/main/home_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
+            Home
+          </a>
+        </li>
 
-        <li><a class="dropdown-item" th:href="@{/members/{memberId}/update(memberId=${session.loginMember.id})}">설정</a></li>
+        <li class="nav-item"
+            th:if="${session.loginMember != null}">
+          <a th:href="@{/stores/list}" class="nav-link text-white">
+            <img src="/img/main/store_setting_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
+            가게 관리
+          </a>
+        </li>
 
-        <li><hr class="dropdown-divider"></li>
-
-        <li>
-          <form th:action="@{/members/logout}" method="post" style="display:none;" id="logoutForm">
-            <input type="hidden"/>
-          </form>
-          <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit();">로그아웃</a>
+        <li class="nav-item"
+            th:if="${session.loginMember != null}">
+          <a th:href="@{/reservations/list}" class="nav-link text-white">
+            <img src="/img/main/reservation_icon.png" class="bi pe-none me-2" style="width: 20%; height: 15%;"/>
+            예약 내역
+          </a>
         </li>
       </ul>
-    </div>
-  </nav>
+
+      <hr>
+
+      <div th:if="${session.loginMember != null}" class="dropdown">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <img th:if="${session.loginMember.storedFileName == 'default_icon.PNG'}"
+               src="/img/main/user_icon.png"
+               width="32" height="32" class="rounded-circle me-2">
+
+          <img th:if="${session.loginMember.storedFileName != 'default_icon.PNG'}"
+               th:src="@{|/profileImageUpload/${session.loginMember.storedFileName}|}"
+               width="32" height="32" class="rounded-circle me-2">
+
+          <strong th:text="${session.loginMember.name}" style="font-size: 1.0rem;"></strong>
+        </a>
+
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+          <li><a class="dropdown-item" th:href="@{/members/{memberId}/delete(memberId=${session.loginMember.id})}">회원탈퇴</a></li>
+
+          <li><hr class="dropdown-divider"></li>
+
+          <li><a class="dropdown-item" th:href="@{/members/{memberId}/update(memberId=${session.loginMember.id})}">설정</a></li>
+
+          <li><hr class="dropdown-divider"></li>
+
+          <li>
+            <form th:action="@{/members/logout}" method="post" style="display:none;" id="logoutForm">
+              <input type="hidden"/>
+            </form>
+            <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit();">로그아웃</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
 
 
-  <main>
-    <div class="location_find">
-      <input type="text" id="address" class="form-control" placeholder="이동할 주소 입력하세요"
-               onkeydown="handleEnter(event)">
+    <main>
+      <div class="location_find">
+        <input type="text" id="address" class="form-control" placeholder="이동할 주소 입력하세요"
+                 onkeydown="handleEnter(event)">
 
-      <button class="btn btn-primary" id="moveToCurrentLocation">내 위치</button>
-    </div>
+        <button class="btn btn-primary" id="moveToCurrentLocation">내 위치</button>
+      </div>
 
-    <div id="map"></div>
+      <div id="map"></div>
 
 
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header text-center">
-              <h4>가게 등록</h4>
-            </div>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header text-center">
+                <h4>가게 등록</h4>
+              </div>
 
-            <div class="card-body">
-              <form action="" th:action th:object="${uploadForm}" method="post" enctype="multipart/form-data">
-                <div class="mb-3">
-                  <select th:field="*{category}" class="form-select" th:errorclass="field-error">
-                    <option value="">시설 종류 선택</option>
-                    <option th:value="식당">식당</option>
-                    <option th:value="편의점">편의점</option>
-                    <option th:value="카페">카페</option>
-                    <option th:value="PC방">PC방</option>
-                    <option th:value="오락시설">오락시설</option>
-                    <option th:value="문화시설">문화시설</option>
-                    <option th:value="운동시설">운동시설</option>
-                    <option th:value="술집">술집</option>
-                    <option th:value="기타">기타</option>
-                  </select>
-                  <div class="error-sign" th:errors="*{category}"></div>
-                </div>
+              <div class="card-body">
+                <form action="" th:action th:object="${uploadForm}" method="post" enctype="multipart/form-data">
+                  <div class="mb-3">
+                    <select th:field="*{category}" class="form-select" th:errorclass="field-error">
+                      <option value="">시설 종류 선택</option>
+                      <option th:value="식당">식당</option>
+                      <option th:value="편의점">편의점</option>
+                      <option th:value="카페">카페</option>
+                      <option th:value="PC방">PC방</option>
+                      <option th:value="오락시설">오락시설</option>
+                      <option th:value="문화시설">문화시설</option>
+                      <option th:value="운동시설">운동시설</option>
+                      <option th:value="술집">술집</option>
+                      <option th:value="기타">기타</option>
+                    </select>
+                    <div class="error-sign" th:errors="*{category}"></div>
+                  </div>
 
-                <div class="mb-3">
-                  <label th:for="img">가게 이미지 선택</label>
-                  <input class="form-control mt-2" type="file" name="imageFiles" multiple>
-                </div>
+                  <div class="mb-3">
+                    <label th:for="img">가게 이미지 선택</label>
+                    <input class="form-control mt-2" type="file" name="imageFiles" multiple>
+                  </div>
 
-                <div class="mb-3">
-                  <input type="text" id="store-name" th:field="*{name}" class="form-control" placeholder="가게명"
-                         th:errorclass="field-error">
-                  <div class="error-sign" th:errors="*{name}"></div>
-                </div>
+                  <div class="mb-3">
+                    <input type="text" id="store-name" th:field="*{name}" class="form-control" placeholder="가게명"
+                           th:errorclass="field-error">
+                    <div class="error-sign" th:errors="*{name}"></div>
+                  </div>
 
-                <div class="mb-3">
-                  <input type="text" id="store-number" th:field="*{number}" class="form-control" placeholder="연락처 ex) 9999-9999-9999"
-                         th:errorclass="field-error">
-                  <div class="error-sign" th:errors="*{number}"></div>
-                </div>
+                  <div class="mb-3">
+                    <input type="text" id="store-number" th:field="*{number}" class="form-control" placeholder="연락처 ex) 9999-9999-9999"
+                           th:errorclass="field-error">
+                    <div class="error-sign" th:errors="*{number}"></div>
+                  </div>
 
-                <input type="text" id="store-url" th:field="*{siteUrl}" class="form-control" placeholder="홍보 사이트 url (없으면 공백)">
+                  <input type="text" id="store-url" th:field="*{siteUrl}" class="form-control" placeholder="홍보 사이트 url (없으면 공백)">
 
-                <input type="hidden" id="store-address" th:field="*{address}">
-                <input type="hidden" id="latitude" th:field="*{latitude}">
-                <input type="hidden" id="longitude" th:field="*{longitude}">
-                <div class="error-sign" th:errors="*{latitude}"></div>
+                  <input type="hidden" id="store-address" th:field="*{address}">
+                  <input type="hidden" id="latitude" th:field="*{latitude}">
+                  <input type="hidden" id="longitude" th:field="*{longitude}">
+                  <div class="error-sign" th:errors="*{latitude}"></div>
 
-                <div>
-                  <button class="w-100 btn btn-primary" id="register-btn" type="submit">등록</button>
-                  <button class="w-100 btn btn-secondary"
-                          th:onclick="|location.href='@{/}'|"
-                          type="button">취소
-                  </button>
-                </div>
-              </form>
+                  <div>
+                    <button class="w-100 btn btn-primary" id="register-btn" type="submit">등록</button>
+                    <button class="w-100 btn btn-secondary"
+                            th:onclick="|location.href='@{/}'|"
+                            type="button">취소
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </main>
-</div>
+    </main>
+  </div>
+
+  <!--bootstrapjs-->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+          crossorigin="anonymous">
+  </script>
+
+  <!--jquery-->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+          integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+          crossorigin="anonymous">
+  </script>
+
+  <script src="/js/mouseOver.js"></script>
+  <script src="/js/stores/storeUpload.js"></script>
+  <script src="/js/api/address.js"></script>
 </body>
-
-<!--bootstrapjs-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
-        crossorigin="anonymous">
-</script>
-
-<!--jquery-->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-        crossorigin="anonymous">
-</script>
-
-<script src="/js/stores/storeUpload.js"></script>
-<script src="/js/api/address.js"></script>
-
 </html>
